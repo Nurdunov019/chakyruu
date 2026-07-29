@@ -180,12 +180,15 @@ section{
   letter-spacing:0;opacity:0;filter:blur(9px);
   color:#1f1d1b;
   text-shadow:0 1px 26px rgba(255,255,255,.9), 0 1px 1px rgba(60,55,48,.15);
+  /* шрифт очень тонкий — слегка утолщаем обводкой того же цвета */
+  -webkit-text-stroke:.018em #1f1d1b;
+  paint-order:stroke fill;
 }
 .opened .names .n{animation:nameIn 1.6s cubic-bezier(.2,.7,.25,1) forwards;}
 .opened .names .n1{animation-delay:.9s}
 .opened .names .n2{animation-delay:1.7s}
 @keyframes nameIn{to{opacity:1;filter:blur(0);}}
-.amp{font-family:"Adine Kirnberg","Great Vibes",cursive;font-size:clamp(34px,9vw,64px);color:var(--ink-soft);margin:clamp(4px,1.2vw,12px) 0;display:block;opacity:0;}
+.amp{font-family:"Adine Kirnberg","Great Vibes",cursive;font-size:clamp(34px,9vw,64px);color:var(--ink-soft);-webkit-text-stroke:.018em var(--ink-soft);paint-order:stroke fill;margin:clamp(4px,1.2vw,12px) 0;display:block;opacity:0;}
 .opened .amp{animation:nameIn 1.4s ease 1.35s forwards;}
 .hero-rule{width:0;height:1px;background:var(--ink);opacity:.5;margin:clamp(20px,5vw,34px) auto;}
 .opened .hero-rule{animation:ruleDraw 1.5s cubic-bezier(.5,0,.2,1) 2.3s forwards;}
