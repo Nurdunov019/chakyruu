@@ -279,6 +279,8 @@ h2.script{font-size:clamp(44px,11.5vw,74px);margin-bottom:clamp(14px,4vw,26px);}
   opacity:.85;
 }
 .btn:hover{background:rgba(60,56,50,.95);transform:translateY(-3px);}
+/* последний экран короче — иначе над текстом остаётся полэкрана пустоты */
+.final{min-height:auto;padding-top:clamp(18px,5vw,40px);}
 .final .script{font-size:clamp(34px,8.8vw,56px);line-height:1.35;}
 
 @media (prefers-reduced-motion:reduce){
