@@ -14,6 +14,11 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300&family=Marck+Script&family=Great+Vibes&family=Montserrat:wght@200;300;400&display=swap" rel="stylesheet">
 <style>
+@font-face{
+  font-family:"Adine Kirnberg";
+  src:url("adine-kirnberg.ttf") format("truetype");
+  font-weight:400;font-style:normal;font-display:swap;
+}
 :root{
   --ink:#2b2926;
   --ink-soft:#5c5852;
@@ -170,7 +175,7 @@ section{
 
 .names{line-height:1.7;}
 .names .n{
-  display:block;font-family:"Great Vibes",cursive;font-weight:400;
+  display:block;font-family:"Adine Kirnberg","Great Vibes",cursive;font-weight:400;
   font-size:clamp(64px,21vw,168px);
   letter-spacing:0;opacity:0;filter:blur(9px);
   color:#1f1d1b;
@@ -180,7 +185,7 @@ section{
 .opened .names .n1{animation-delay:.9s}
 .opened .names .n2{animation-delay:1.7s}
 @keyframes nameIn{to{opacity:1;filter:blur(0);}}
-.amp{font-family:"Great Vibes",cursive;font-size:clamp(34px,9vw,64px);color:var(--ink-soft);margin:clamp(4px,1.2vw,12px) 0;display:block;opacity:0;}
+.amp{font-family:"Adine Kirnberg","Great Vibes",cursive;font-size:clamp(34px,9vw,64px);color:var(--ink-soft);margin:clamp(4px,1.2vw,12px) 0;display:block;opacity:0;}
 .opened .amp{animation:nameIn 1.4s ease 1.35s forwards;}
 .hero-rule{width:0;height:1px;background:var(--ink);opacity:.5;margin:clamp(20px,5vw,34px) auto;}
 .opened .hero-rule{animation:ruleDraw 1.5s cubic-bezier(.5,0,.2,1) 2.3s forwards;}
