@@ -1,0 +1,29 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><title>wait</title>
+<style>body{margin:0}iframe{border:0;display:block}</style></head><body>
+<script>
+var S=[[320,568],[360,640],[375,667],[390,844],[414,896],[430,932],[768,1024],[834,1194],[1440,900],[1920,1080]];
+var out=[],done=0;
+S.forEach(function(sz,i){
+  var f=document.createElement("iframe");
+  f.width=sz[0]; f.height=sz[1]; f.src="index.html";
+  f.onload=function(){
+    setTimeout(function(){
+      try{
+        var d=f.contentDocument,w=f.contentWindow,de=d.documentElement,vw=de.clientWidth;
+        d.querySelectorAll(".rise").forEach(function(e){e.classList.add("in")});
+        var r=d.createRange(); r.selectNodeContents(d.querySelector(".names .n1"));
+        var a=r.getBoundingClientRect();
+        var hc=d.querySelector(".hero-content").getBoundingClientRect().height;
+        var cs=w.getComputedStyle(d.getElementById("hero"));
+        var need=hc+parseFloat(cs.paddingTop)+parseFloat(cs.paddingBottom)
+                +d.querySelector(".scroll-cue").getBoundingClientRect().height+16;
+        var ok = a.left>=-1 && a.right<=vw+1 && need<=sz[1] && (de.scrollWidth-vw)<=0;
+        out[i]=sz[0]+"x"+sz[1]+"  ат="+Math.round(a.width)
+          +"  1-экран="+Math.round(need)+"/"+sz[1]+"  "+(ok?"✓":"✗");
+      }catch(e){out[i]=sz[0]+" ERR";}
+      if(++done===S.length) document.title=out.join(" | ");
+    },1700);
+  };
+  document.body.appendChild(f);
+});
+</script></body></html>

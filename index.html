@@ -206,11 +206,6 @@ section{
 @keyframes ruleDraw{to{width:min(320px,66vw);}}
 .tagline{font-size:clamp(26px,7.4vw,46px);opacity:0;}
 .opened .tagline{animation:nameIn 1.6s ease 2.8s forwards;}
-.scroll-cue{position:absolute;bottom:clamp(18px,4vh,34px);left:50%;transform:translateX(-50%);z-index:3;opacity:0;}
-.opened .scroll-cue{animation:nameIn 1.2s ease 3.6s forwards;}
-.scroll-cue span{display:block;width:1px;height:44px;background:linear-gradient(180deg,transparent,var(--hair));margin:10px auto 0;position:relative;overflow:hidden;}
-.scroll-cue span::after{content:"";position:absolute;left:0;top:-44px;width:1px;height:44px;background:var(--ink);opacity:.5;animation:cue 2.4s ease-in-out infinite;}
-@keyframes cue{0%{top:-44px}60%{top:44px}100%{top:44px}}
 
 /* ================= ОРНАМЕНТЫ ================= */
 .sprig{display:block;margin:0 auto;opacity:.55;}
@@ -286,7 +281,7 @@ h2.script{font-size:clamp(44px,11.5vw,74px);margin-bottom:clamp(14px,4vw,26px);}
 @media (prefers-reduced-motion:reduce){
   *{animation-duration:.01ms!important;animation-delay:0s!important;transition-duration:.2s!important;transition-delay:0s!important;}
   .rise{opacity:1;transform:none;}
-  .opened .names .n,.opened .amp,.opened .tagline,.opened .feather,.opened .scroll-cue{opacity:1;filter:none;}
+  .opened .names .n,.opened .amp,.opened .tagline,.opened .feather{opacity:1;filter:none;}
   .opened .hero-rule{opacity:1;}
   .ring circle{stroke-dashoffset:0;}
   html{scroll-behavior:auto;}
@@ -321,7 +316,6 @@ section{
   padding-bottom:max(clamp(26px,6.5vw,64px), env(safe-area-inset-bottom));
 }
 #hero{padding-left:0;padding-right:0;padding-top:0;padding-bottom:0;}
-.scroll-cue{bottom:calc(clamp(14px,3.4vh,32px) + env(safe-area-inset-bottom));}
 .env-stage{padding:env(safe-area-inset-top) 0 env(safe-area-inset-bottom);}
 
 /* hover — только там, где есть мышь (иначе «залипает» на тач-экранах) */
@@ -375,13 +369,17 @@ section{
   .sprig{width:78px;height:30px;}
   .feather{width:clamp(42px,10vw,60px);margin-bottom:12px;}
 }
+/* планшет и компьютер: имена были так велики, что первый экран не помещался */
+@media (min-width:700px){
+  .names{line-height:1.42;}
+  .names .n{font-size:clamp(76px,11vw,116px);}
+}
 @media (max-height:640px){
   .kicker{line-height:1.9;}
   .hair{margin:14px auto;}
-  .names .n{font-size:clamp(34px,10.5vw,54px);}
+  .names .n{font-size:clamp(46px,13vw,56px);}
   .hero-rule{margin:14px auto;}
   .tagline{font-size:clamp(22px,6vw,32px);}
-  .scroll-cue span{height:30px;}
   .count b{font-size:24px;}
 }
 
@@ -396,7 +394,6 @@ section{
   .amp{font-size:22px;margin:0;}
   .hero-rule{margin:10px auto;}
   .tagline{font-size:24px;}
-  .scroll-cue{display:none;}
   h2.script{font-size:32px;margin-bottom:8px;}
   .text{font-size:16px;line-height:1.55;}
   .text.caps{font-size:11px;line-height:1.7;}
@@ -681,10 +678,6 @@ section{
     </div>
   </div>
 
-  <div class="scroll-cue">
-    <div class="label">Листайте</div>
-    <span></span>
-  </div>
 </section>
 
 
@@ -710,10 +703,6 @@ section{
   <div class="divider rise d1"><i></i><b>&#9829;</b><i></i></div>
 
   <h2 class="script rise d2">Дорогие родные<br>и друзья!</h2>
-
-  <p class="text rise d3">
-    Совсем скоро состоится наша свадьба!
-  </p>
 
   <p class="text caps rise d3" style="margin-top:clamp(16px,4vw,24px)">
     С огромной радостью приглашаем вас разделить с нами
@@ -794,7 +783,7 @@ section{
 
 <!-- ==================== ФИНАЛ ==================== -->
 <section class="final">
-  <div class="rise script">Будем счастливы<br>видеть вас<br>в этот день</div>
+  <div class="rise script">Будем счастливы<br>увидеть вас<br>в этот день</div>
   <div class="hair rise d2"></div>
   <div class="label rise d3">Акназар &amp; Медина · 22.08.2026</div>
 </section>
