@@ -1,2 +1,5 @@
 .DS_Store
 node_modules/
+
+# временные тестовые файлы
+__*.html
