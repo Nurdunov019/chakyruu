@@ -188,22 +188,14 @@ section{
 @keyframes nameIn{to{opacity:1;filter:blur(0);}}
 .amp{font-family:"Adine Kirnberg","Great Vibes",cursive;font-size:clamp(34px,9vw,64px);color:var(--ink-soft);margin:clamp(4px,1.2vw,12px) 0;display:block;opacity:0;}
 .opened .amp{animation:nameIn 1.4s ease 1.35s forwards;}
-/* подпись на линии: ——— Акназар & Медина ——— */
-.hero-rule{
-  display:flex;align-items:center;justify-content:center;
-  gap:clamp(10px,3vw,18px);
-  width:min(360px,74vw);margin:clamp(20px,5vw,34px) auto;
-  opacity:0;
-}
-.opened .hero-rule{animation:nameIn 1.5s ease 2.3s forwards;}
-.hero-rule i{flex:1;height:1px;min-width:18px;background:linear-gradient(90deg,transparent,var(--hair));}
-.hero-rule i:last-child{background:linear-gradient(90deg,var(--hair),transparent);}
-.hero-rule b{
-  font-family:"Adine Kirnberg","Great Vibes",cursive;font-weight:400;
-  font-size:clamp(19px,5vw,28px);line-height:1.1;
-  color:var(--ink-soft);white-space:nowrap;
-}
+.hero-rule{width:0;height:1px;background:var(--ink);opacity:.5;margin:clamp(20px,5vw,34px) auto;}
+.opened .hero-rule{animation:ruleDraw 1.5s cubic-bezier(.5,0,.2,1) 2.3s forwards;}
 @keyframes ruleDraw{to{width:min(320px,66vw);}}
+.scroll-cue{position:absolute;bottom:clamp(18px,4vh,34px);left:50%;transform:translateX(-50%);z-index:3;opacity:0;}
+.opened .scroll-cue{animation:nameIn 1.2s ease 3.6s forwards;}
+.scroll-cue span{display:block;width:1px;height:44px;background:linear-gradient(180deg,transparent,var(--hair));margin:10px auto 0;position:relative;overflow:hidden;}
+.scroll-cue span::after{content:"";position:absolute;left:0;top:-44px;width:1px;height:44px;background:var(--ink);opacity:.5;animation:cue 2.4s ease-in-out infinite;}
+@keyframes cue{0%{top:-44px}60%{top:44px}100%{top:44px}}
 .tagline{font-size:clamp(26px,7.4vw,46px);opacity:0;}
 .opened .tagline{animation:nameIn 1.6s ease 2.8s forwards;}
 
@@ -281,8 +273,8 @@ h2.script{font-size:clamp(44px,11.5vw,74px);margin-bottom:clamp(14px,4vw,26px);}
 @media (prefers-reduced-motion:reduce){
   *{animation-duration:.01ms!important;animation-delay:0s!important;transition-duration:.2s!important;transition-delay:0s!important;}
   .rise{opacity:1;transform:none;}
-  .opened .names .n,.opened .amp,.opened .tagline,.opened .feather{opacity:1;filter:none;}
-  .opened .hero-rule{opacity:1;}
+  .opened .names .n,.opened .amp,.opened .tagline,.opened .feather,.opened .scroll-cue{opacity:1;filter:none;}
+  .opened .hero-rule{width:min(320px,66vw);}
   .ring circle{stroke-dashoffset:0;}
   html{scroll-behavior:auto;}
 }
@@ -316,6 +308,7 @@ section{
   padding-bottom:max(clamp(26px,6.5vw,64px), env(safe-area-inset-bottom));
 }
 #hero{padding-left:0;padding-right:0;padding-top:0;padding-bottom:0;}
+.scroll-cue{bottom:calc(clamp(14px,3.4vh,32px) + env(safe-area-inset-bottom));}
 .env-stage{padding:env(safe-area-inset-top) 0 env(safe-area-inset-bottom);}
 
 /* hover — только там, где есть мышь (иначе «залипает» на тач-экранах) */
@@ -379,6 +372,7 @@ section{
   .hair{margin:14px auto;}
   .names .n{font-size:clamp(46px,13vw,56px);}
   .hero-rule{margin:14px auto;}
+  .scroll-cue span{height:30px;}
   .tagline{font-size:clamp(22px,6vw,32px);}
   .count b{font-size:24px;}
 }
@@ -393,6 +387,7 @@ section{
   .names .n{font-size:clamp(30px,7vh,46px);}
   .amp{font-size:22px;margin:0;}
   .hero-rule{margin:10px auto;}
+  .scroll-cue{display:none;}
   .tagline{font-size:24px;}
   h2.script{font-size:32px;margin-bottom:8px;}
   .text{font-size:16px;line-height:1.55;}
@@ -673,11 +668,13 @@ section{
       <span class="n n2">Медина</span>
     </div>
 
-    <div class="hero-rule">
-      <i></i><b>Акназар &amp; Медина</b><i></i>
-    </div>
+    <div class="hero-rule"></div>
   </div>
 
+  <div class="scroll-cue">
+    <div class="label">Листайте</div>
+    <span></span>
+  </div>
 </section>
 
 
