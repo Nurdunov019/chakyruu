@@ -780,7 +780,7 @@ section{
 
 <!-- ==================== ФИНАЛ ==================== -->
 <section class="final">
-  <div class="rise script">Будем счастливы<br>увидеть вас<br>в этот день</div>
+  <div class="rise script">Будем счастливы<br>видеть вас<br>в этот день</div>
   <div class="hair rise d2"></div>
   <div class="label rise d3">Акназар &amp; Медина · 22.08.2026</div>
 </section>
@@ -788,6 +788,12 @@ section{
 <script>
 (function(){
   var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* Браузер запоминает, докуда долистали, и при перезагрузке возвращает туда —
+     из-за автопрокрутки это выглядело как прыжок вниз сразу после открытия. */
+  try{ if('scrollRestoration' in history) history.scrollRestoration='manual'; }catch(e){}
+  window.scrollTo(0,0);
+  window.addEventListener('load', function(){ window.scrollTo(0,0); });
 
   /* --- реальная высота экрана (старые Android / iOS Safari) --- */
   function setVH(){
@@ -1028,8 +1034,11 @@ section{
     }
 
     /* запуск при первом касании/скролле (autoplay со звуком браузеры блокируют) */
+    /* 'scroll' здесь нет намеренно: автопрокрутка сыплет им ~60 раз в секунду,
+       а программная прокрутка всё равно не даёт права на звук. Живой свайп
+       поднимает touchstart раньше, так что ничего не теряем. */
     var evs = ['pointerdown','pointerup','touchstart','touchend','touchmove',
-               'mousedown','click','keydown','wheel','scroll'];
+               'mousedown','click','keydown','wheel'];
     function once(){
       start();
       if(began) evs.forEach(function(e){
