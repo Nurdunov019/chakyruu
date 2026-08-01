@@ -877,6 +877,68 @@ section{
   }
   tick(); setInterval(tick,30000);
 
+  /* ================= МЕДЛЕННАЯ АВТОПРОКРУТКА ================= */
+  (function(){
+    if(reduce) return;                       // «уменьшить движение» — уважаем
+    var de = document.documentElement;
+    var active=false, pos=0, last=null, raf=null, resumeT=null, finished=false;
+
+    /* один экран примерно за 7 секунд */
+    function speed(){ return window.innerHeight/7; }
+    function maxScroll(){
+      return Math.max(0, document.body.scrollHeight - window.innerHeight);
+    }
+
+    function step(ts){
+      if(!active) return;
+      if(last===null) last=ts;
+      pos += speed()*((ts-last)/1000);
+      last = ts;
+      var end = maxScroll();
+      if(pos >= end-1){ window.scrollTo(0,end); stop(true); return; }
+      window.scrollTo(0,pos);
+      raf = requestAnimationFrame(step);
+    }
+
+    function start(){
+      if(active || finished || document.hidden) return;
+      if(window.scrollY >= maxScroll()-2) return;
+      /* css scroll-behavior:smooth дерётся с покадровой прокруткой */
+      de.style.scrollBehavior='auto';
+      pos = window.scrollY; last=null; active=true;
+      raf = requestAnimationFrame(step);
+    }
+
+    function pause(){
+      active=false;
+      if(raf){ cancelAnimationFrame(raf); raf=null; }
+      de.style.scrollBehavior='';
+    }
+    function stop(done){ pause(); if(done) finished=true; }
+
+    function later(){                        // возобновить, когда гость затих
+      if(resumeT) clearTimeout(resumeT);
+      resumeT = setTimeout(start, 1600);
+    }
+    function hold(){                         // палец на экране — стоим
+      pause();
+      if(resumeT){ clearTimeout(resumeT); resumeT=null; }
+    }
+
+    ['touchstart','touchmove','mousedown','keydown'].forEach(function(e){
+      window.addEventListener(e, hold, {passive:true});
+    });
+    ['touchend','mouseup'].forEach(function(e){
+      window.addEventListener(e, later, {passive:true});
+    });
+    window.addEventListener('wheel', function(){ pause(); later(); }, {passive:true});
+    document.addEventListener('visibilitychange', function(){
+      if(document.hidden) pause(); else later();
+    });
+
+    setTimeout(start, 4600);                 // ждём, пока отыграет первый экран
+  })();
+
   /* ================= МУЗЫКА ================= */
   (function(){
     var wrap  = document.getElementById('music');
