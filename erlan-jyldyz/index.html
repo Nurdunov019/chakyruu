@@ -785,6 +785,68 @@ section{
   }
   tick(); setInterval(tick,30000);
 
+  /* ================= МЕДЛЕННАЯ АВТОПРОКРУТКА ================= */
+  (function(){
+    if(reduce) return;                       // «уменьшить движение» — уважаем
+    var de = document.documentElement;
+    var active=false, pos=0, last=null, raf=null, resumeT=null;
+
+    /* один экран за 8 секунд — медленнее, чем было */
+    function speed(){ return window.innerHeight/8; }
+    function maxScroll(){
+      return Math.max(0, document.body.scrollHeight - window.innerHeight);
+    }
+
+    function step(ts){
+      if(!active) return;
+      if(last===null) last=ts;
+      pos += speed()*((ts-last)/1000);
+      last = ts;
+      var end = maxScroll();
+      if(pos >= end-1){ window.scrollTo(0,end); pause(); return; }
+      window.scrollTo(0,pos);
+      raf = requestAnimationFrame(step);
+    }
+
+    function start(){
+      if(active || document.hidden) return;
+      if(window.scrollY >= maxScroll()-2) return;
+      /* css scroll-behavior:smooth дерётся с покадровой прокруткой */
+      de.style.scrollBehavior='auto';
+      pos = window.scrollY; last=null; active=true;
+      raf = requestAnimationFrame(step);
+    }
+
+    function pause(){
+      active=false;
+      if(raf){ cancelAnimationFrame(raf); raf=null; }
+      de.style.scrollBehavior='';
+    }
+    function later(){                        // возобновить, когда гость затих
+      if(resumeT) clearTimeout(resumeT);
+      resumeT = setTimeout(start, 1200);
+    }
+    function hold(){                         // палец на экране — стоим
+      pause();
+      if(resumeT){ clearTimeout(resumeT); resumeT=null; }
+    }
+
+    ['touchstart','touchmove','mousedown'].forEach(function(e){
+      window.addEventListener(e, hold, {passive:true});
+    });
+    ['touchend','mouseup'].forEach(function(e){
+      window.addEventListener(e, later, {passive:true});
+    });
+    /* колесо и клавиши: остановились и через паузу поехали дальше */
+    window.addEventListener('wheel',   function(){ pause(); later(); }, {passive:true});
+    window.addEventListener('keydown', function(){ pause(); later(); }, {passive:true});
+    document.addEventListener('visibilitychange', function(){
+      if(document.hidden) pause(); else later();
+    });
+
+    setTimeout(start, 2600);                 // как на сайте-образце
+  })();
+
   /* ================= МУЗЫКА ================= */
   (function(){
     var wrap  = document.getElementById('music');
