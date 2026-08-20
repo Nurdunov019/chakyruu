@@ -1,0 +1,950 @@
+<!DOCTYPE html>
+<html lang="ky">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5, viewport-fit=cover">
+<meta name="theme-color" content="#242a22">
+<meta name="color-scheme" content="light only">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="format-detection" content="telephone=no">
+<title>Эрлан &amp; Жылдыз — Тойго чакыруу</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300&family=Marck+Script&family=Bad+Script&family=Caveat:wght@500;600;700&family=Great+Vibes&family=Montserrat:wght@200;300;400&display=swap" rel="stylesheet">
+<style>
+@font-face{
+  font-family:"Adine Kirnberg";
+  src:url("../adine-kirnberg.ttf") format("truetype");
+  font-weight:400;font-style:normal;font-display:swap;
+}
+:root{
+  --ink:#2b2926;
+  --ink-soft:#5c5852;
+  --hair:#b9b2a8;
+  --ring:#8d8579;
+  --shadow:rgba(60,55,48,.18);
+  --green-dark:#242a22;
+  --green:#3a4235;
+  --env-1:#8d9878;
+  --env-2:#6e7a5c;
+  --env-3:#5b6650;
+  --gold:#d6a656;
+  --paper:#f4f1e8;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{
+  font-family:"Cormorant Garamond",Georgia,serif;
+  color:var(--ink);
+  background:#eceae6;
+  overflow-x:hidden;
+  -webkit-font-smoothing:antialiased;
+}
+
+/* ================= ШЁЛК (фон) ================= */
+.silk-layer{position:fixed;inset:0;z-index:-5;width:100%;height:100%;pointer-events:none;}
+.silk-layer svg{width:100%;height:100%;display:block;}
+.sheen{
+  position:fixed;inset:-30%;z-index:-4;pointer-events:none;
+  background:linear-gradient(102deg,transparent 30%,rgba(255,255,255,.55) 44%,rgba(255,255,255,.75) 50%,rgba(255,255,255,.55) 56%,transparent 70%);
+  opacity:.45;animation:sheenMove 22s ease-in-out infinite alternate;
+}
+@keyframes sheenMove{
+  from{transform:translate3d(-16%,-6%,0) rotate(.5deg);}
+  to{transform:translate3d(16%,6%,0) rotate(-.5deg);}
+}
+/* слабые телефоны: тяжёлые SVG-фильтры заменяем градиентами */
+.lite .silk-layer svg{display:none;}
+.lite .silk-layer{
+  background:
+    linear-gradient(118deg, transparent 10%, rgba(255,255,255,.9) 24%, transparent 40%),
+    linear-gradient(72deg, transparent 52%, rgba(255,255,255,.75) 68%, transparent 84%),
+    linear-gradient(150deg,#e4dfd8 0%,#fbfaf8 42%,#efece7 72%,#ddd8d1 100%);
+}
+.lite .sheen{animation:none;opacity:.3;}
+
+/* ================= ФОНОВОЕ ФОТО ================= */
+.bg-photo{
+  position:fixed;inset:0;z-index:-3;pointer-events:none;
+  background-repeat:no-repeat;
+  background-size:cover;
+  background-position:center 35%;
+  opacity:0;transition:opacity 1.6s ease;
+  transform:scale(1.04);   /* убирает белую кромку по краям */
+}
+body.has-bg .bg-photo{opacity:1;}
+/* вуаль поверх фона — чтобы текст читался */
+.bg-veil{
+  position:fixed;inset:0;z-index:-2;pointer-events:none;
+  opacity:0;transition:opacity 1.6s ease;
+  background:
+    radial-gradient(120% 80% at 50% 30%, rgba(246,244,240,.34) 0%, rgba(246,244,240,.72) 60%, rgba(244,241,234,.88) 100%),
+    linear-gradient(180deg, rgba(248,246,242,.72) 0%, rgba(246,244,240,.60) 30%, rgba(244,241,234,.82) 100%);
+}
+body.has-bg .bg-veil{opacity:1;}
+body.has-bg{background:#f4f2ee;}
+
+/* ================= ОБЩЕЕ ================= */
+section{
+  min-height:100svh;display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  padding:clamp(28px,7vw,64px) clamp(20px,6vw,48px);
+  position:relative;z-index:1;text-align:center;
+}
+.script{font-family:"Marck Script",cursive;font-weight:400;}
+.label{
+  font-family:"Montserrat",sans-serif;font-weight:300;
+  letter-spacing:.4em;text-transform:uppercase;
+  font-size:clamp(10px,2.8vw,12.5px);color:var(--ink-soft);
+}
+.hair{height:1px;background:linear-gradient(90deg,transparent,var(--hair),transparent);width:min(300px,62vw);margin:26px auto;}
+.rise{opacity:0;transform:translateY(28px);transition:opacity 1.1s cubic-bezier(.22,.68,.3,1),transform 1.1s cubic-bezier(.22,.68,.3,1);}
+.rise.in{opacity:1;transform:none;}
+.d1{transition-delay:.12s}.d2{transition-delay:.26s}.d3{transition-delay:.4s}.d4{transition-delay:.54s}.d5{transition-delay:.68s}
+
+/* ================= ГЛАВНЫЙ ЭКРАН (после открытия) ================= */
+.hero-content{position:relative;z-index:2;width:100%;opacity:0;}
+.opened .hero-content{opacity:1;}
+.photo-wrap{position:absolute;inset:0;z-index:0;overflow:hidden;opacity:0;transition:opacity 1.6s ease .4s;}
+.opened.has-photo .photo-wrap{opacity:1;}
+#couplePhoto{width:100%;height:100%;object-fit:cover;object-position:center center;transform:scale(1.25);filter:saturate(.68) contrast(.95) brightness(1.05);}
+.photo-sign{
+  position:absolute;left:0;right:0;bottom:8%;z-index:1;
+  display:flex;flex-direction:column;align-items:center;gap:6px;
+  opacity:0;transition:opacity 1.4s ease 1.0s;
+  pointer-events:none;
+}
+.opened.has-photo .photo-sign{opacity:1;}
+.photo-sign-hearts{
+  font-size:9px;letter-spacing:.5em;color:#8d8579;opacity:.8;
+  padding-left:.5em; /* компенсация letter-spacing */
+}
+.photo-sign-name{
+  font-family:"Great Vibes",cursive;font-weight:400;
+  font-size:clamp(28px,7.5vw,42px);color:#3d3a35;
+  text-shadow:0 1px 14px rgba(255,255,255,.9), 0 1px 2px rgba(255,255,255,.7);
+}
+.photo-veil{
+  position:absolute;inset:0;
+  background:
+    radial-gradient(78% 62% at 50% 42%, rgba(255,255,255,.16) 0%, rgba(255,255,255,.32) 55%, rgba(247,245,242,.6) 100%),
+    linear-gradient(180deg, rgba(255,255,255,.42) 0%, transparent 22%, transparent 66%, rgba(250,249,246,.88) 100%);
+}
+.names{line-height:1.7;}
+.names .n{
+  display:block;font-family:"Adine Kirnberg","Great Vibes",cursive;font-weight:400;
+  font-size:clamp(64px,21vw,168px);
+  letter-spacing:0;opacity:0;filter:blur(9px);
+  color:var(--ink);
+  text-shadow:0 1px 26px rgba(255,255,255,.9), 0 1px 1px rgba(60,55,48,.15);
+}
+.opened .names .n{animation:nameIn 1.6s cubic-bezier(.2,.7,.25,1) forwards;}
+.opened .names .n1{animation-delay:.9s}
+.opened .names .n2{animation-delay:1.7s}
+@keyframes nameIn{to{opacity:1;filter:blur(0);}}
+.amp{font-family:"Adine Kirnberg","Great Vibes",cursive;font-size:clamp(34px,9vw,64px);color:var(--ink-soft);margin:clamp(4px,1.2vw,12px) 0;display:block;opacity:0;}
+.opened .amp{animation:nameIn 1.4s ease 1.35s forwards;}
+.hero-rule{width:0;height:1px;background:var(--ink);opacity:.5;margin:clamp(20px,5vw,34px) auto;}
+.opened .hero-rule{animation:ruleDraw 1.5s cubic-bezier(.5,0,.2,1) 2.3s forwards;}
+@keyframes ruleDraw{to{width:min(320px,66vw);}}
+.scroll-cue{position:absolute;bottom:clamp(18px,4vh,34px);left:50%;transform:translateX(-50%);z-index:3;opacity:0;}
+.opened .scroll-cue{animation:nameIn 1.2s ease 3.6s forwards;}
+.scroll-cue span{display:block;width:1px;height:44px;background:linear-gradient(180deg,transparent,var(--hair));margin:10px auto 0;position:relative;overflow:hidden;}
+.scroll-cue span::after{content:"";position:absolute;left:0;top:-44px;width:1px;height:44px;background:var(--ink);opacity:.5;animation:cue 2.4s ease-in-out infinite;}
+@keyframes cue{0%{top:-44px}60%{top:44px}100%{top:44px}}
+.tagline{font-size:clamp(26px,7.4vw,46px);opacity:0;}
+.opened .tagline{animation:nameIn 1.6s ease 2.8s forwards;}
+
+/* ================= ОРНАМЕНТЫ ================= */
+.sprig{display:block;margin:0 auto;opacity:.55;}
+.sprig.bottom{transform:rotate(180deg);}
+.divider{display:flex;align-items:center;justify-content:center;gap:16px;margin:clamp(22px,5vw,34px) auto;width:min(340px,76vw);}
+.divider i{flex:1;height:1px;background:linear-gradient(90deg,transparent,rgba(150,140,112,.55));}
+.divider i+i{background:linear-gradient(90deg,rgba(150,140,112,.55),transparent);}
+.divider b{font-size:10px;color:#9a8f6e;font-weight:400;letter-spacing:.2em;}
+.kicker{
+  font-family:"Montserrat",sans-serif;font-weight:300;
+  font-size:clamp(10px,2.7vw,12px);letter-spacing:.42em;text-transform:uppercase;
+  color:var(--ink-soft);line-height:2.2;
+}
+
+/* ================= 2. ГОСТИ + КАЛЕНДАРЬ ================= */
+h2.script{font-size:clamp(44px,11.5vw,74px);margin-bottom:clamp(14px,4vw,26px);}
+.text{font-size:clamp(19px,5.1vw,27px);line-height:1.85;font-weight:300;max-width:min(560px,90vw);}
+.text.caps{
+  font-size:clamp(13px,3.5vw,16px);letter-spacing:.16em;text-transform:uppercase;
+  line-height:2.15;font-weight:400;color:var(--ink-soft);max-width:min(480px,88vw);
+}
+.month{font-size:clamp(36px,9vw,56px);margin:clamp(26px,6vw,44px) 0 14px;}
+.parents{
+  font-family:"Caveat","Bad Script",cursive;font-weight:600;
+  font-size:clamp(38px,9.6vw,58px);line-height:1.25;margin-top:clamp(8px,2.2vw,14px);
+  color:var(--ink);letter-spacing:.01em;
+  text-shadow:0 1px 16px rgba(255,255,255,.95), 0 1px 2px rgba(60,55,48,.10);
+}
+.cal{width:min(380px,90vw);margin:0 auto;}
+.cal-head,.cal-row{display:grid;grid-template-columns:repeat(7,1fr);}
+.cal-head div{font-family:"Montserrat",sans-serif;font-weight:300;font-size:clamp(11px,3vw,13px);color:var(--ink-soft);padding-bottom:12px;letter-spacing:.04em;}
+.cal-row div{font-size:clamp(18px,4.9vw,24px);font-weight:300;padding:clamp(6px,1.8vw,9px) 0;position:relative;}
+.cal-row div.mute{opacity:0;}
+.day-x{font-weight:400;}
+.ring{position:absolute;left:50%;top:50%;width:clamp(34px,9vw,42px);height:clamp(34px,9vw,42px);transform:translate(-50%,-50%);}
+.ring circle{fill:none;stroke:var(--ring);stroke-width:1.1;stroke-dasharray:126;stroke-dashoffset:126;transform-origin:50% 50%;transform:rotate(-90deg);}
+.in .ring circle{animation:ringDraw 1.5s cubic-bezier(.4,0,.2,1) .35s forwards;}
+@keyframes ringDraw{to{stroke-dashoffset:0;}}
+.ring-glow{position:absolute;left:50%;top:50%;width:clamp(34px,9vw,42px);height:clamp(34px,9vw,42px);transform:translate(-50%,-50%);border-radius:50%;opacity:0;}
+.in .ring-glow{animation:pulse 3.2s ease-out 1.9s infinite;}
+@keyframes pulse{
+  0%{opacity:.9;box-shadow:0 0 0 0 rgba(141,133,121,.3);}
+  70%{opacity:0;box-shadow:0 0 0 16px rgba(141,133,121,0);}
+  100%{opacity:0;}
+}
+.count{display:flex;gap:clamp(14px,5vw,34px);justify-content:center;margin-top:clamp(26px,6vw,40px);}
+.count div{min-width:52px;}
+.count b{display:block;font-weight:300;font-size:clamp(30px,7.8vw,44px);line-height:1;}
+.count small{font-family:"Montserrat",sans-serif;font-weight:300;font-size:10px;letter-spacing:.24em;text-transform:uppercase;color:var(--ink-soft);}
+
+/* ================= 3. МЕСТО ================= */
+.venue{font-size:clamp(22px,5.8vw,31px);font-weight:400;letter-spacing:.14em;text-transform:uppercase;}
+.addr{font-size:clamp(18px,4.8vw,24px);font-weight:300;color:var(--ink-soft);line-height:1.6;margin-top:8px;}
+.time-big{font-size:clamp(52px,14.5vw,86px);font-weight:300;letter-spacing:.04em;margin:6px 0 2px;}
+.btns{
+  display:flex;flex-wrap:wrap;gap:12px;justify-content:center;
+  margin-top:clamp(26px,6vw,38px);
+}
+.btn{
+  display:inline-flex;align-items:center;gap:9px;
+  font-family:"Montserrat",sans-serif;font-weight:300;
+  letter-spacing:.2em;text-transform:uppercase;font-size:12px;
+  color:#fff;background:rgba(84,79,71,.88);
+  padding:15px 28px;border-radius:40px;text-decoration:none;
+  transition:transform .35s cubic-bezier(.2,.7,.25,1),background .35s;
+  box-shadow:0 10px 24px -14px var(--shadow);
+}
+.btn-ico{
+  width:15px;height:15px;flex:0 0 15px;
+  fill:none;stroke:currentColor;stroke-width:1.6;
+  stroke-linecap:round;stroke-linejoin:round;
+  opacity:.85;
+}
+.btn:hover{background:rgba(60,56,50,.95);transform:translateY(-3px);}
+/* последний экран короче — иначе над текстом остаётся полэкрана пустоты */
+.final{min-height:auto;padding-top:clamp(18px,5vw,40px);}
+.final .script{font-size:clamp(34px,8.8vw,56px);line-height:1.35;}
+
+@media (prefers-reduced-motion:reduce){
+  *{animation-duration:.01ms!important;animation-delay:0s!important;transition-duration:.2s!important;transition-delay:0s!important;}
+  .rise{opacity:1;transform:none;}
+  .opened .names .n,.opened .amp,.opened .tagline,.opened .scroll-cue{opacity:1;filter:none;}
+  .opened .hero-rule{width:min(320px,66vw);}
+  .ring circle{stroke-dashoffset:0;}
+  html{scroll-behavior:auto;}
+}
+
+/* ============================================================
+   АДАПТАЦИЯ ПОД ВСЕ МОБИЛЬНЫЕ УСТРОЙСТВА
+   ============================================================ */
+
+html{
+  -webkit-text-size-adjust:100%;text-size-adjust:100%;
+  overscroll-behavior-y:none;
+}
+body{
+  -webkit-tap-highlight-color:transparent;
+  overscroll-behavior-y:none;
+  text-rendering:optimizeLegibility;
+}
+img,svg,iframe{max-width:100%;}
+button{font:inherit;-webkit-appearance:none;appearance:none;}
+
+/* высота экрана: старый vh -> JS-переменная -> svh */
+section{min-height:100vh;min-height:calc(var(--vh,1vh)*100);}
+@supports (height:100svh){section{min-height:100svh;}}
+
+
+/* безопасные зоны (чёлка, «домашняя» полоса) */
+section{
+  padding-left:max(clamp(18px,5.5vw,48px), env(safe-area-inset-left));
+  padding-right:max(clamp(18px,5.5vw,48px), env(safe-area-inset-right));
+  padding-top:max(clamp(26px,6.5vw,64px), env(safe-area-inset-top));
+  padding-bottom:max(clamp(26px,6.5vw,64px), env(safe-area-inset-bottom));
+}
+#hero{padding-left:0;padding-right:0;padding-top:0;padding-bottom:0;}
+.scroll-cue{bottom:calc(clamp(14px,3.4vh,32px) + env(safe-area-inset-bottom));}
+.env-stage{padding:env(safe-area-inset-top) 0 env(safe-area-inset-bottom);}
+
+/* hover — только там, где есть мышь (иначе «залипает» на тач-экранах) */
+@media (hover:none){
+  .btn:hover,.seal:hover{transform:none;background:rgba(84,79,71,.88);filter:none;}
+  .seal:hover{transform:translate(-50%,-50%);}
+}
+
+/* ---------- УЗКИЕ ЭКРАНЫ (iPhone SE, старые Android ~320–380px) ---------- */
+@media (max-width:400px){
+  .venue{font-size:19px;letter-spacing:.09em;}
+  .addr{font-size:16px;}
+  .text{font-size:18px;line-height:1.7;}
+  .text.caps{font-size:12px;letter-spacing:.1em;line-height:1.95;}
+  .kicker{font-size:9.5px;letter-spacing:.3em;line-height:2;}
+  .label{font-size:9.5px;letter-spacing:.3em;}
+  .cal{width:100%;}
+  .cal-row div{font-size:16px;padding:5px 0;}
+  .cal-head div{font-size:10px;padding-bottom:8px;}
+  .ring,.ring-glow{width:30px;height:30px;}
+  .count{gap:12px;}
+  .count div{min-width:44px;}
+  .count b{font-size:26px;}
+  .count small{font-size:8.5px;letter-spacing:.16em;}
+  .btn{padding:13px 20px;font-size:10.5px;letter-spacing:.14em;}
+  .btns{gap:9px;}
+  .divider{width:86%;gap:11px;margin:16px auto;}
+  .env{width:88vw;}
+  .seal{width:76px;height:76px;}
+  .tap-hint{font-size:9.5px;letter-spacing:.3em;}
+}
+@media (max-width:340px){
+  .names .n{font-size:40px;}
+  .cal-row div{font-size:14px;}
+  .time-big{font-size:46px;}
+  h2.script{font-size:38px;}
+  .month{font-size:32px;}
+}
+
+/* ---------- НИЗКИЕ ЭКРАНЫ (контент не помещается по высоте) ---------- */
+@media (max-height:760px){
+  h2.script{font-size:clamp(32px,8.4vw,46px);margin-bottom:10px;}
+  .month{font-size:clamp(28px,7vw,38px);margin:16px 0 8px;}
+  .text{font-size:clamp(16px,4.3vw,20px);line-height:1.6;}
+  .text.caps{font-size:clamp(11px,3vw,13px);line-height:1.85;}
+  .cal-row div{padding:4px 0;}
+  .divider{margin:14px auto;}
+  .count{margin-top:16px;}
+  .time-big{font-size:clamp(40px,11vw,58px);}
+  .map{height:clamp(150px,24vh,210px);margin:16px auto 14px;}
+  .sprig{width:78px;height:30px;}
+}
+/* планшет и компьютер: имена были так велики, что первый экран не помещался */
+@media (min-width:700px){
+  .names{line-height:1.42;}
+  .names .n{font-size:clamp(76px,11vw,116px);}
+}
+@media (max-height:640px){
+  .kicker{line-height:1.9;}
+  .hair{margin:14px auto;}
+  .names .n{font-size:clamp(46px,13vw,56px);}
+  .hero-rule{margin:14px auto;}
+  .scroll-cue span{height:30px;}
+  .tagline{font-size:clamp(22px,6vw,32px);}
+  .count b{font-size:24px;}
+}
+
+/* ---------- ГОРИЗОНТАЛЬНАЯ ОРИЕНТАЦИЯ ТЕЛЕФОНА ---------- */
+@media (orientation:landscape) and (max-height:560px){
+  section{padding-top:24px;padding-bottom:24px;}
+  .env{width:min(320px,74vh);}
+  .env-stage{gap:14px;}
+  .seal{width:64px;height:64px;}
+  .names .n{font-size:clamp(30px,7vh,46px);}
+  .amp{font-size:22px;margin:0;}
+  .hero-rule{margin:10px auto;}
+  .scroll-cue{display:none;}
+  .tagline{font-size:24px;}
+  h2.script{font-size:32px;margin-bottom:8px;}
+  .text{font-size:16px;line-height:1.55;}
+  .text.caps{font-size:11px;line-height:1.7;}
+  .month{font-size:26px;margin:12px 0 6px;}
+  .cal{width:min(330px,60vw);}
+  .cal-row div{font-size:14px;padding:2px 0;}
+  .ring,.ring-glow{width:26px;height:26px;}
+  .count{margin-top:12px;}
+  .count b{font-size:22px;}
+  .time-big{font-size:44px;}
+  .map{height:150px;margin:14px auto 12px;}
+  .divider{margin:10px auto;}
+  .sprig{width:64px;height:25px;}
+}
+
+/* ---------- ПЛАНШЕТЫ И ДЕСКТОП ---------- */
+@media (min-width:820px){
+  .env{width:470px;}
+  .seal{width:112px;height:112px;}
+  .text{max-width:600px;}
+}
+
+/* ---------- ЭКОНОМНЫЙ РЕЖИМ ДЛЯ СЛАБЫХ ТЕЛЕФОНОВ ---------- */
+.lite .env{filter:drop-shadow(0 22px 26px rgba(0,0,0,.5));}
+.lite .paper-tex{background-image:none;}
+
+/* ================= МУЗЫКА ================= */
+.music{
+  position:fixed;z-index:60;
+  right:clamp(12px,3.4vw,22px);
+  top:calc(env(safe-area-inset-top,0px) + clamp(12px,3.4vw,22px));
+  display:flex;flex-direction:column;align-items:flex-end;gap:10px;
+  font-family:"Montserrat",sans-serif;
+}
+.music-btn{
+  position:relative;width:46px;height:46px;padding:0;border-radius:50%;
+  border:1px solid rgba(141,133,121,.32);
+  background:rgba(244,241,232,.84);
+  -webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);
+  box-shadow:0 4px 18px rgba(60,55,48,.18);
+  display:flex;align-items:center;justify-content:center;cursor:pointer;
+  transition:transform .25s ease,box-shadow .25s ease;
+  -webkit-tap-highlight-color:transparent;
+}
+.music-btn:active{transform:scale(.92);}
+.music-btn::after{
+  content:"";position:absolute;inset:-5px;border-radius:50%;
+  border:1px dashed rgba(214,166,86,.55);opacity:0;transition:opacity .5s ease;
+}
+.music.playing .music-btn::after{opacity:1;animation:mSpin 9s linear infinite;}
+@keyframes mSpin{to{transform:rotate(360deg);}}
+/* мягкая пульсация, пока музыка ещё не запущена */
+.music-btn::before{
+  content:"";position:absolute;inset:0;border-radius:50%;
+  box-shadow:0 0 0 0 rgba(214,166,86,.45);
+}
+.music.idle .music-btn::before{animation:mPulse 2.6s ease-out infinite;}
+@keyframes mPulse{
+  0%{box-shadow:0 0 0 0 rgba(214,166,86,.45);}
+  70%{box-shadow:0 0 0 14px rgba(214,166,86,0);}
+  100%{box-shadow:0 0 0 0 rgba(214,166,86,0);}
+}
+.m-icon{width:21px;height:21px;overflow:visible;}
+.m-icon .body{fill:#b8944e;stroke:#b8944e;stroke-width:1.4;stroke-linejoin:round;}
+.m-icon .wave,.m-icon .mute{
+  fill:none;stroke:#b8944e;stroke-width:1.6;stroke-linecap:round;
+  transition:opacity .3s ease;
+}
+/* играет — волны; тишина — крестик */
+.m-icon .wave{opacity:0;}
+.m-icon .mute{opacity:1;}
+.music.playing .m-icon .wave{opacity:1;}
+.music.playing .m-icon .mute{opacity:0;}
+/* волны «дышат», пока идёт музыка */
+.music.playing .m-icon .w2{animation:mWave 1.9s ease-in-out infinite;}
+.music.playing .m-icon .w3{animation:mWave 1.9s ease-in-out .25s infinite;}
+@keyframes mWave{0%,100%{opacity:1;}50%{opacity:.32;}}
+
+/* --- список треков --- */
+.music-list{
+  min-width:min(230px,68vw);
+  background:rgba(244,241,232,.94);
+  -webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);
+  border:1px solid rgba(141,133,121,.28);border-radius:14px;
+  box-shadow:0 10px 30px rgba(60,55,48,.2);
+  padding:6px;
+  transform-origin:100% 0;
+  opacity:0;transform:translateY(-8px) scale(.94);pointer-events:none;
+  transition:opacity .28s ease,transform .28s cubic-bezier(.22,.68,.3,1);
+}
+.music.open .music-list{opacity:1;transform:none;pointer-events:auto;}
+.music-list-cap{
+  font-size:9px;letter-spacing:.26em;text-transform:uppercase;
+  color:var(--ink-soft);opacity:.7;padding:7px 10px 6px;
+}
+.mtrack{
+  display:flex;align-items:center;gap:10px;width:100%;
+  padding:9px 10px;border:0;border-radius:10px;background:transparent;
+  text-align:left;cursor:pointer;color:var(--ink);
+  -webkit-tap-highlight-color:transparent;transition:background .2s ease;
+}
+.mtrack:active{background:rgba(141,133,121,.14);}
+.mtrack.on{background:rgba(141,152,120,.18);}
+.mtrack.off{opacity:.35;cursor:default;}
+.mtrack.off:active{background:transparent;}
+.mt-txt{display:flex;flex-direction:column;gap:2px;min-width:0;}
+.mt-txt b{font-weight:400;font-size:12px;letter-spacing:.02em;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.mt-txt i{font-style:normal;font-weight:300;font-size:10px;color:var(--ink-soft);
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+/* эквалайзер у активного трека */
+.mt-eq{display:flex;align-items:flex-end;gap:2px;width:13px;height:13px;flex:0 0 13px;}
+.mt-eq i{display:block;width:3px;height:30%;background:var(--env-2);border-radius:1px;opacity:.45;}
+.mtrack.on .mt-eq i{opacity:1;}
+.music.playing .mtrack.on .mt-eq i{animation:mEq .9s ease-in-out infinite;}
+.mt-eq i:nth-child(2){animation-delay:.15s !important;}
+.mt-eq i:nth-child(3){animation-delay:.3s !important;}
+@keyframes mEq{0%,100%{height:28%;}50%{height:100%;}}
+
+@media (max-width:360px){
+  .music-btn{width:42px;height:42px;}
+}
+.lite .music.playing .music-btn::after{animation:none;}
+.lite .music.idle .music-btn::before{animation:none;}
+
+</style>
+</head>
+<body>
+
+<!-- ================= ШЁЛКОВАЯ ТКАНЬ ================= -->
+<div class="silk-layer" aria-hidden="true">
+<svg viewBox="0 0 1000 1600" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#ffffff"/><stop offset="38%" stop-color="#f6f4f1"/>
+      <stop offset="70%" stop-color="#e9e5e0"/><stop offset="100%" stop-color="#dcd7d0"/>
+    </linearGradient>
+    <linearGradient id="foldGrad" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0"/>
+      <stop offset="35%" stop-color="#ffffff" stop-opacity=".95"/>
+      <stop offset="52%" stop-color="#ffffff" stop-opacity=".2"/>
+      <stop offset="70%" stop-color="#b7afa5" stop-opacity=".45"/>
+      <stop offset="100%" stop-color="#b7afa5" stop-opacity="0"/>
+    </linearGradient>
+    <filter id="drape" x="-25%" y="-25%" width="150%" height="150%" color-interpolation-filters="sRGB">
+      <feTurbulence type="fractalNoise" baseFrequency="0.0022 0.0055" numOctaves="4" seed="12" result="n"/>
+      <feDisplacementMap in="SourceGraphic" in2="n" scale="260" xChannelSelector="R" yChannelSelector="G"/>
+      <feGaussianBlur stdDeviation="5"/>
+    </filter>
+    <filter id="drape2" x="-25%" y="-25%" width="150%" height="150%" color-interpolation-filters="sRGB">
+      <feTurbulence type="fractalNoise" baseFrequency="0.0016 0.004" numOctaves="3" seed="41" result="n2"/>
+      <feDisplacementMap in="SourceGraphic" in2="n2" scale="330" xChannelSelector="R" yChannelSelector="G"/>
+      <feGaussianBlur stdDeviation="11"/>
+    </filter>
+    <filter id="grain" x="0" y="0" width="100%" height="100%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="2" result="g"/>
+      <feColorMatrix type="saturate" values="0"/>
+    </filter>
+    <g id="bands">
+      <g transform="rotate(-28 500 800)">
+        <rect x="-700" y="-500" width="150" height="3200" fill="url(#foldGrad)"/>
+        <rect x="-430" y="-500" width="230" height="3200" fill="url(#foldGrad)"/>
+        <rect x="-100" y="-500" width="180" height="3200" fill="url(#foldGrad)"/>
+        <rect x="180" y="-500" width="260" height="3200" fill="url(#foldGrad)"/>
+        <rect x="520" y="-500" width="170" height="3200" fill="url(#foldGrad)"/>
+        <rect x="780" y="-500" width="240" height="3200" fill="url(#foldGrad)"/>
+        <rect x="1120" y="-500" width="190" height="3200" fill="url(#foldGrad)"/>
+        <rect x="1400" y="-500" width="250" height="3200" fill="url(#foldGrad)"/>
+      </g>
+    </g>
+  </defs>
+  <rect width="1000" height="1600" fill="url(#bg)"/>
+  <g filter="url(#drape2)" opacity=".7"><use href="#bands" transform="translate(-60 40) scale(1.15)"/></g>
+  <g filter="url(#drape)" opacity=".85"><use href="#bands"/></g>
+  <ellipse cx="230" cy="180" rx="620" ry="520" fill="#ffffff" opacity=".55"/>
+  <ellipse cx="880" cy="1480" rx="560" ry="480" fill="#ffffff" opacity=".35"/>
+  <ellipse cx="920" cy="120" rx="420" ry="380" fill="#cfc8bf" opacity=".22"/>
+  <ellipse cx="60" cy="1520" rx="480" ry="420" fill="#cfc8bf" opacity=".2"/>
+  <rect width="1000" height="1600" filter="url(#grain)" opacity=".045"/>
+</svg>
+</div>
+<div class="sheen" aria-hidden="true"></div>
+
+<!-- ================= ФОН =================
+     Рядом с index.html положите файл bg.jpg (руки с кольцами)
+-->
+<div class="bg-photo" id="bgPhoto" aria-hidden="true"></div>
+<div class="bg-veil" aria-hidden="true"></div>
+
+
+<!-- ================= МУЗЫКА =================
+     Рядом с index.html положите два файла:
+       music1.mp3  — Unchained Melody
+       music2.mp3  — What A Wonderful World
+-->
+<div class="music idle" id="music">
+  <button class="music-btn" id="musicBtn" type="button"
+          aria-label="Музыка" aria-expanded="false">
+    <svg class="m-icon" viewBox="0 0 24 24" aria-hidden="true">
+      <!-- динамик -->
+      <path class="body" d="M4 9.6h3.4L11.8 5.6v12.8L7.4 14.4H4z"/>
+      <!-- звук идёт -->
+      <path class="wave w2" d="M15 9.4a3.9 3.9 0 0 1 0 5.2"/>
+      <path class="wave w3" d="M17.7 6.9a7.6 7.6 0 0 1 0 10.2"/>
+      <!-- тишина -->
+      <path class="mute" d="M15.6 9.6l4.8 4.8M20.4 9.6l-4.8 4.8"/>
+    </svg>
+  </button>
+
+  <div class="music-list" id="musicList" role="menu">
+    <div class="music-list-cap">Музыка</div>
+    <!-- 1-й трек: играет сразу при открытии.
+         Файл music1.mp3 рядом с index.html — или прямая ссылка в data-url -->
+    <button class="mtrack on" type="button" role="menuitem"
+            data-name="music1" data-alt="Unchained Melody" data-url="../music1.m4a">
+      <span class="mt-eq" aria-hidden="true"><i></i><i></i><i></i></span>
+      <span class="mt-txt"><b>Unchained Melody</b><i>The Righteous Brothers</i></span>
+    </button>
+    <button class="mtrack" type="button" role="menuitem"
+            data-name="music2" data-alt="What A Wonderful World" data-url="../music2.m4a">
+      <span class="mt-eq" aria-hidden="true"><i></i><i></i><i></i></span>
+      <span class="mt-txt"><b>What A Wonderful World</b><i>Louis Armstrong</i></span>
+    </button>
+  </div>
+</div>
+
+<audio id="musicAudio" loop preload="auto" playsinline></audio>
+
+<!-- ==================== 1 ==================== -->
+<section id="hero">
+
+  <!-- ПОСЛЕ ОТКРЫТИЯ -->
+  <div class="photo-wrap">
+    <div class="photo-sign">
+      <div class="photo-sign-hearts">&#9829;&#9829;&#9829;</div>
+      <div class="photo-sign-name">Эрлан&amp;Жылдыз</div>
+    </div>
+    <!-- ФОТО ПАРЫ: положите файл photo.jpg рядом с этим файлом -->
+    <img id="couplePhoto" src="photo.jpg" alt="">
+    <div class="photo-veil"></div>
+  </div>
+
+  <div class="hero-content">
+    <div class="names">
+      <span class="n n1">Эрлан</span>
+      <span class="amp script">&amp;</span>
+      <span class="n n2">Жылдыз</span>
+    </div>
+
+    <div class="hero-rule"></div>
+  </div>
+
+  <div class="scroll-cue">
+    <div class="label">Барактаңыз</div>
+    <span></span>
+  </div>
+</section>
+
+
+<!-- ==================== 2 ==================== -->
+<section id="guests">
+  <div class="rise"><svg class="sprig" viewBox="0 0 120 46" width="104" height="40" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <path d="M6 41C34 41 78 30 114 6" stroke="#8d8461" stroke-width="1.4" stroke-linecap="round"/>
+      <g fill="#968d68">
+        <ellipse cx="24" cy="34" rx="9.5" ry="4.4" transform="rotate(-26 24 34)"/>
+        <ellipse cx="42" cy="28" rx="9.5" ry="4.4" transform="rotate(-29 42 28)"/>
+        <ellipse cx="60" cy="22" rx="9.5" ry="4.4" transform="rotate(-32 60 22)"/>
+        <ellipse cx="78" cy="16" rx="9" ry="4.2" transform="rotate(-34 78 16)"/>
+        <ellipse cx="95" cy="10" rx="8" ry="3.8" transform="rotate(-36 95 10)"/>
+        <ellipse cx="34" cy="42" rx="8.4" ry="3.9" transform="rotate(20 34 42)"/>
+        <ellipse cx="52" cy="36" rx="8.4" ry="3.9" transform="rotate(17 52 36)"/>
+        <ellipse cx="70" cy="30" rx="8" ry="3.7" transform="rotate(14 70 30)"/>
+        <ellipse cx="87" cy="23" rx="7.4" ry="3.5" transform="rotate(11 87 23)"/>
+      </g>
+    </svg></div>
+
+  <div class="kicker rise d1" style="margin-top:clamp(14px,4vw,22px)">Тойго чакыруу</div>
+
+  <div class="divider rise d1"><i></i><b>&#9829;</b><i></i></div>
+
+  <p class="text rise d3" style="margin-top:clamp(18px,4.5vw,26px)">
+    Үйлөнүү үлпөт тоюна арналган<br>
+    салтанатка келип, кадырлуу<br>
+    коногубуз болууга чакырабыз
+  </p>
+
+  <div class="divider rise d4"><i></i><b>&#9829;</b><i></i></div>
+
+  <div class="month script rise d4">Август</div>
+
+  <div class="cal rise d4">
+    <div class="cal-head"><div>дш</div><div>шш</div><div>шр</div><div>бш</div><div>жм</div><div>иш</div><div>жк</div></div>
+    <div class="cal-row"><div class="mute">·</div><div class="mute">·</div><div class="mute">·</div><div class="mute">·</div><div class="mute">·</div><div>1</div><div>2</div></div>
+    <div class="cal-row"><div>3</div><div>4</div><div>5</div><div>6</div><div>7</div><div>8</div><div>9</div></div>
+    <div class="cal-row"><div>10</div><div>11</div><div>12</div><div>13</div><div>14</div><div>15</div><div>16</div></div>
+    <div class="cal-row">
+      <div>17</div><div>18</div><div>19</div><div>20</div><div>21</div><div>22</div><div>23</div>
+    </div>
+    <div class="cal-row">
+      <div>24</div><div>25</div><div>26</div><div>27</div><div>28</div>
+      <div class="day-x">
+        <svg class="ring" viewBox="0 0 44 44"><circle cx="22" cy="22" r="20"/></svg>
+        <span class="ring-glow"></span>29
+      </div>
+      <div>30</div>
+    </div>
+    <div class="cal-row"><div>31</div><div class="mute">·</div><div class="mute">·</div><div class="mute">·</div><div class="mute">·</div><div class="mute">·</div><div class="mute">·</div></div>
+  </div>
+  <div class="kicker rise d5" style="margin-top:clamp(28px,7vw,44px)">Тойго калган убакыт</div>
+  <div class="count rise d5">
+    <div><b id="cd">—</b><small>күн</small></div>
+    <div><b id="ch">—</b><small>саат</small></div>
+    <div><b id="cm">—</b><small>мүнөт</small></div>
+  </div>
+</section>
+
+<!-- ==================== 3 ==================== -->
+<section id="place">
+  <div class="rise"><svg class="sprig" viewBox="0 0 120 46" width="92" height="35" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+      <path d="M6 41C34 41 78 30 114 6" stroke="#8d8461" stroke-width="1.4" stroke-linecap="round"/>
+      <g fill="#968d68">
+        <ellipse cx="24" cy="34" rx="9.5" ry="4.4" transform="rotate(-26 24 34)"/>
+        <ellipse cx="42" cy="28" rx="9.5" ry="4.4" transform="rotate(-29 42 28)"/>
+        <ellipse cx="60" cy="22" rx="9.5" ry="4.4" transform="rotate(-32 60 22)"/>
+        <ellipse cx="78" cy="16" rx="9" ry="4.2" transform="rotate(-34 78 16)"/>
+        <ellipse cx="95" cy="10" rx="8" ry="3.8" transform="rotate(-36 95 10)"/>
+        <ellipse cx="34" cy="42" rx="8.4" ry="3.9" transform="rotate(20 34 42)"/>
+        <ellipse cx="52" cy="36" rx="8.4" ry="3.9" transform="rotate(17 52 36)"/>
+        <ellipse cx="70" cy="30" rx="8" ry="3.7" transform="rotate(14 70 30)"/>
+        <ellipse cx="87" cy="23" rx="7.4" ry="3.5" transform="rotate(11 87 23)"/>
+      </g>
+    </svg></div>
+
+  <h2 class="script rise d1" style="margin-top:clamp(12px,3vw,20px)">Той салтанаты</h2>
+
+  <div class="divider rise d1"><i></i><b>&#9829;</b><i></i></div>
+
+  <div class="label rise d2">Ишемби, 29-август 2026</div>
+  <div class="time-big rise d2">10:00</div>
+  <div class="label rise d2">Салтанаттын башталышы</div>
+
+  <div class="divider rise d3"><i></i><b>&#9829;</b><i></i></div>
+
+  <div class="kicker rise d3">Урматтоо менен</div>
+  <div class="parents rise d3">Шералы<br>Шайыргүл</div>
+
+</section>
+
+<!-- ==================== ФИНАЛ ==================== -->
+<section class="final">
+  <div class="rise script">Ошол күнү<br>сиздерди көрсөк<br>бактылуу болобуз</div>
+  <div class="hair rise d2"></div>
+  <div class="label rise d3">Эрлан &amp; Жылдыз · 29.08.2026</div>
+</section>
+
+<script>
+(function(){
+  var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* Браузер запоминает, докуда долистали, и при перезагрузке возвращает туда —
+     из-за автопрокрутки это выглядело как прыжок вниз сразу после открытия. */
+  try{ if('scrollRestoration' in history) history.scrollRestoration='manual'; }catch(e){}
+  window.scrollTo(0,0);
+  window.addEventListener('load', function(){ window.scrollTo(0,0); });
+
+  /* --- реальная высота экрана (старые Android / iOS Safari) --- */
+  function setVH(){
+    document.documentElement.style.setProperty('--vh', (window.innerHeight*0.01)+'px');
+  }
+  setVH();
+  window.addEventListener('resize', setVH);
+  window.addEventListener('orientationchange', function(){ setTimeout(setVH,250); });
+
+  /* --- экономный режим на слабых устройствах --- */
+  var slow = (navigator.hardwareConcurrency && navigator.hardwareConcurrency <= 4)
+          || (navigator.deviceMemory && navigator.deviceMemory <= 4)
+          || (window.innerWidth < 360);
+  if(slow) document.body.classList.add('lite');
+
+  /* ---- автопоказ (без конверта) ---- */
+  document.body.classList.add('opened');
+
+  /* ---- фоновое фото (bg.jpg) ---- */
+  (function(){
+    var box = document.getElementById('bgPhoto');
+    if(!box) return;
+    var names = ['bg.jpg','bg.jpeg','bg.png','bg.webp','фон.jpg','фон.png'], i = 0;
+    (function next(){
+      if(i >= names.length) return;          // фона нет — сайт работает как раньше
+      var im = new Image();
+      var src = encodeURI(names[i]);
+      im.onload = function(){
+        box.style.backgroundImage = 'url("' + src + '")';
+        document.body.classList.add('has-bg');
+      };
+      im.onerror = function(){ i++; next(); };
+      im.src = src;
+    })();
+  })();
+
+  /* ---- фото ---- */
+  /* Фото на главном экране. Поставьте true — вернётся как было. */
+  var SHOW_PHOTO = false;
+
+  var ph = document.getElementById('couplePhoto');
+  function photoOk(){ document.body.classList.add('has-photo'); }
+  if(!SHOW_PHOTO){
+    ph.parentNode.removeChild(ph);          // не грузим и не показываем
+  }else{
+    ph.addEventListener('load', photoOk);
+    ph.addEventListener('error', function(){ ph.style.display='none'; });
+    /* картинка вшита в html (base64) и часто готова ещё до этой строки —
+       тогда событие load уже прошло и его не поймать */
+    if(ph.complete){ ph.naturalWidth ? photoOk() : (ph.style.display='none'); }
+  }
+
+  /* ---- появление секций ---- */
+  var io = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); }
+    });
+  },{threshold:.18});
+  document.querySelectorAll('.rise').forEach(function(el){ io.observe(el); });
+
+  /* ---- обратный отсчёт до 29 августа 2026, 10:00 ---- */
+  var target = new Date(2026,7,29,10,0,0).getTime();
+  function tick(){
+    var diff = Math.max(0, target - Date.now());
+    document.getElementById('cd').textContent = Math.floor(diff/864e5);
+    document.getElementById('ch').textContent = Math.floor(diff%864e5/36e5);
+    document.getElementById('cm').textContent = Math.floor(diff%36e5/6e4);
+  }
+  tick(); setInterval(tick,30000);
+
+  /* ================= МУЗЫКА ================= */
+  (function(){
+    var wrap  = document.getElementById('music');
+    var btn   = document.getElementById('musicBtn');
+    var list  = document.getElementById('musicList');
+    var audio = document.getElementById('musicAudio');
+    if(!wrap || !audio) return;
+
+    var items = [].slice.call(list.querySelectorAll('.mtrack'));
+    var cur   = 0;      // текущий трек
+    var began = false;  // музыка уже стартовала хоть раз
+
+    /* Имя файла может отличаться — проверяем варианты, пока один не откроется:
+       music1.mp3 / music1.m4a / «Unchained Melody.mp3» / ... */
+    var EXT = ['.mp3','.m4a','.ogg','.wav'];
+    function candidates(el){
+      var out = [];
+      if(el.dataset.url) out.push(el.dataset.url);   // прямая ссылка, если задана
+      [el.dataset.name, el.dataset.alt].forEach(function(b){
+        if(b) EXT.forEach(function(e){ out.push(encodeURI(b + e)); });
+      });
+      return out;
+    }
+
+    var url = items.map(function(){ return null; });  // найденный файл трека
+
+    /* ищем существующий файл, не трогая основной <audio> */
+    function resolve(el, done){
+      var cand = candidates(el), i = 0;
+      (function next(){
+        if(i >= cand.length){ done(null); return; }
+        var probe = new Audio();
+        probe.preload = 'metadata';
+        function off(){ probe.oncanplay = probe.onloadedmetadata = probe.onerror = null; }
+        probe.onloadedmetadata = function(){ var s = cand[i]; off(); probe.src=''; done(s); };
+        probe.onerror = function(){ off(); probe.src=''; i++; next(); };
+        probe.src = cand[i];
+      })();
+    }
+
+    audio.volume = 0;
+
+    var checked = 0;
+    items.forEach(function(el, i){
+      resolve(el, function(found){
+        url[i] = found;
+        if(!found) el.classList.add('off');
+        if(i === 0 && found){ audio.src = found; start(); }
+        if(++checked === items.length && !url.some(Boolean)){
+          wrap.classList.remove('idle','playing');
+          wrap.style.display = 'none';           // ни одного файла — кнопки нет
+        }else if(checked === items.length && !url[0]){
+          /* первого трека нет — переключаемся на первый найденный */
+          for(var k=0;k<url.length;k++) if(url[k]){ cur=k; audio.src=url[k]; mark(); start(); break; }
+        }
+      });
+    });
+
+    /* плавное появление звука */
+    function fadeIn(){
+      var v = 0, step = setInterval(function(){
+        v += 0.06;
+        if(v >= 0.85){ v = 0.85; clearInterval(step); }
+        try{ audio.volume = v; }catch(e){ clearInterval(step); }
+      }, 90);
+    }
+
+    function mark(){
+      items.forEach(function(el,i){ el.classList.toggle('on', i === cur); });
+    }
+
+    function play(){
+      var p = audio.play();
+      if(p && p.catch) p.catch(function(){ /* браузер ждёт касания */ });
+      return p;
+    }
+
+    function start(){
+      if(began || !audio.src) return;
+      var p = audio.play();
+      if(p && p.then){
+        p.then(function(){ began = true; fadeIn(); })
+         .catch(function(){ /* заблокировано — ждём касания */ });
+      }else{
+        began = true; fadeIn();
+      }
+    }
+
+    /* запуск при первом касании/скролле (autoplay со звуком браузеры блокируют) */
+    /* 'scroll' здесь нет намеренно: автопрокрутка сыплет им ~60 раз в секунду,
+       а программная прокрутка всё равно не даёт права на звук. Живой свайп
+       поднимает touchstart раньше, так что ничего не теряем. */
+    var evs = ['pointerdown','pointerup','touchstart','touchend','touchmove',
+               'mousedown','click','keydown','wheel'];
+    function once(){
+      start();
+      if(began) evs.forEach(function(e){
+        window.removeEventListener(e, once, true);
+      });
+    }
+    evs.forEach(function(e){
+      window.addEventListener(e, once, {capture:true, passive:true});
+    });
+
+    /* состояние кнопки */
+    audio.addEventListener('play',  function(){
+      wrap.classList.add('playing'); wrap.classList.remove('idle');
+    });
+    audio.addEventListener('pause', function(){ wrap.classList.remove('playing'); });
+
+    audio.addEventListener('error', function(){ wrap.classList.remove('playing'); });
+
+    /* кнопка — открыть/закрыть список */
+    btn.addEventListener('click', function(e){
+      e.stopPropagation();
+      var open = wrap.classList.toggle('open');
+      btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+    });
+
+    /* выбор трека */
+    items.forEach(function(el, i){
+      el.addEventListener('click', function(e){
+        e.stopPropagation();
+        if(!url[i]) return;                      // файла нет — ничего не делаем
+        if(i === cur && !audio.paused){ audio.pause(); return; }
+        if(i !== cur){
+          cur = i;
+          audio.volume = 0;
+          audio.src = url[i];
+          mark();
+        }
+        began = true;
+        play();
+        fadeIn();
+        setTimeout(function(){
+          wrap.classList.remove('open');
+          btn.setAttribute('aria-expanded','false');
+        }, 260);
+      });
+    });
+
+    /* клик вне списка — закрыть */
+    document.addEventListener('click', function(){
+      if(wrap.classList.contains('open')){
+        wrap.classList.remove('open');
+        btn.setAttribute('aria-expanded','false');
+      }
+    });
+
+    /* пауза, когда вкладку свернули */
+    document.addEventListener('visibilitychange', function(){
+      if(document.hidden && !audio.paused){ audio.pause(); wrap.dataset.resume = '1'; }
+      else if(!document.hidden && wrap.dataset.resume === '1'){
+        wrap.dataset.resume = ''; play();
+      }
+    });
+
+    mark();
+  })();
+})();
+</script>
+</body>
+</html>
