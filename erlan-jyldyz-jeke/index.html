@@ -726,12 +726,11 @@ section{
       <div>17</div><div>18</div><div>19</div><div>20</div><div>21</div><div>22</div><div>23</div>
     </div>
     <div class="cal-row">
-      <div>24</div><div>25</div><div>26</div><div>27</div><div>28</div>
+      <div>24</div><div>25</div><div>26</div><div>27</div><div>28</div><div>29</div>
       <div class="day-x">
         <svg class="ring" viewBox="0 0 44 44"><circle cx="22" cy="22" r="20"/></svg>
-        <span class="ring-glow"></span>29
+        <span class="ring-glow"></span>30
       </div>
-      <div>30</div>
     </div>
     <div class="cal-row"><div>31</div><div class="mute">·</div><div class="mute">·</div><div class="mute">·</div><div class="mute">·</div><div class="mute">·</div><div class="mute">·</div></div>
   </div>
@@ -770,7 +769,7 @@ section{
 
   <div class="divider rise d3"><i></i><b>&#9829;</b><i></i></div>
 
-  <div class="label rise d3">Суббота, 29 августа 2026</div>
+  <div class="label rise d3">Воскресенье, 30 августа 2026</div>
   <div class="time-big rise d3">17:00</div>
   <div class="label rise d4">Начало торжества</div>
 
@@ -780,7 +779,7 @@ section{
 <section class="final">
   <div class="rise script">Будем счастливы<br>видеть тебя<br>в этот день</div>
   <div class="hair rise d2"></div>
-  <div class="label rise d3">Эрлан &amp; Жылдыз · 29.08.2026</div>
+  <div class="label rise d3">Эрлан &amp; Жылдыз · 30.08.2026</div>
 </section>
 
 <script>
@@ -871,8 +870,8 @@ section{
   },{threshold:.18});
   document.querySelectorAll('.rise').forEach(function(el){ io.observe(el); });
 
-  /* ---- обратный отсчёт до 29 августа 2026, 17:00 ---- */
-  var target = new Date(2026,7,29,17,0,0).getTime();
+  /* ---- обратный отсчёт до 30 августа 2026, 17:00 ---- */
+  var target = new Date(2026,7,30,17,0,0).getTime();
   function tick(){
     var diff = Math.max(0, target - Date.now());
     document.getElementById('cd').textContent = Math.floor(diff/864e5);
