@@ -706,10 +706,10 @@ section{
   <!-- ============================================================
        ЖЕКЕ КАЙРЫЛУУ — ар бир конокко ушул жерди гана алмаштырабыз
        ============================================================ -->
-  <h2 class="script guest rise d2">Дорогие гости!</h2>
+  <h2 class="script guest rise d2">Дорогой<br>Мухаммед!</h2>
 
   <p class="text caps rise d3" style="margin-top:clamp(16px,4vw,24px)">
-    С огромной радостью приглашаем вас разделить с нами
+    С огромной радостью приглашаем тебя разделить с нами
     самый важный день нашей жизни — день нашей свадьбы.
   </p>
 
@@ -760,31 +760,25 @@ section{
       </g>
     </svg></div>
 
-  <h2 class="script rise d1" style="margin-top:clamp(12px,3vw,20px)">Торжество</h2>
+  <h2 class="script rise d1" style="margin-top:clamp(12px,3vw,20px)">Место проведения</h2>
 
   <div class="divider rise d1"><i></i><b>&#9829;</b><i></i></div>
 
-  <div class="label rise d2">Суббота, 29 августа 2026</div>
-  <div class="time-big rise d2">10:00</div>
-  <div class="label rise d2">Начало торжества</div>
+  <div class="rise d2">
+    <div class="venue">&laquo;Манас Холл&raquo;</div>
+  </div>
 
   <div class="divider rise d3"><i></i><b>&#9829;</b><i></i></div>
 
-  <div class="kicker rise d3">С уважением</div>
-  <div class="parents rise d3">Шералы<br>Гульшайыр</div>
-
-  <div class="divider rise d4"><i></i><b>&#9829;</b><i></i></div>
-
-  <div class="kicker rise d4">Наш адрес</div>
-  <div class="rise d4" style="margin-top:clamp(10px,3vw,16px)">
-    <div class="addr">с. Чангет-Сай<br>ул. Тажибаева Кимсанбая, № 63</div>
-  </div>
+  <div class="label rise d3">Суббота, 29 августа 2026</div>
+  <div class="time-big rise d3">17:00</div>
+  <div class="label rise d4">Начало торжества</div>
 
 </section>
 
 <!-- ==================== ФИНАЛ ==================== -->
 <section class="final">
-  <div class="rise script">Будем счастливы<br>видеть вас<br>в этот день</div>
+  <div class="rise script">Будем счастливы<br>видеть тебя<br>в этот день</div>
   <div class="hair rise d2"></div>
   <div class="label rise d3">Эрлан &amp; Жылдыз · 29.08.2026</div>
 </section>
@@ -877,8 +871,8 @@ section{
   },{threshold:.18});
   document.querySelectorAll('.rise').forEach(function(el){ io.observe(el); });
 
-  /* ---- обратный отсчёт до 29 августа 2026, 10:00 ---- */
-  var target = new Date(2026,7,29,10,0,0).getTime();
+  /* ---- обратный отсчёт до 29 августа 2026, 17:00 ---- */
+  var target = new Date(2026,7,29,17,0,0).getTime();
   function tick(){
     var diff = Math.max(0, target - Date.now());
     document.getElementById('cd').textContent = Math.floor(diff/864e5);
