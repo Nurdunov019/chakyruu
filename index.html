@@ -863,7 +863,7 @@ section{
   document.querySelectorAll('.rise').forEach(function(el){ io.observe(el); });
 
   /* ---- обратный отсчёт до 15 Октябрь 2026, 17:00 ---- */
-  var target = new Date(2026,7,22,17,0,0).getTime();
+  var target = new Date(2026, 9, 15, 17, 0, 0).getTime();
   function tick(){
     var diff = Math.max(0, target - Date.now());
     document.getElementById('cd').textContent = Math.floor(diff/864e5);
