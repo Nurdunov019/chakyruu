@@ -293,7 +293,9 @@ html.anim .prog .pearl:not(.in){opacity:0;transform:translate(-50%,-50%) scale(.
   .hero .n2{padding-right:4%}
   .hero .and{font-size:52px}
   .hero .date{font-size:22px}
-  .hands{grid-column:2;grid-row:1 / span 5;width:118%;margin:0 -8% 0 0;align-self:center}
+  .hands{grid-column:2;grid-row:1 / span 5;width:118%;margin:0 calc(-6vw - 44px) 0 0;justify-self:end;align-self:center}
+  .hands img{scale:-1 1;-webkit-mask-image:linear-gradient(180deg,transparent 0%,#000 28%,#000 80%,transparent 100%);mask-image:linear-gradient(180deg,transparent 0%,#000 28%,#000 80%,transparent 100%)}
+  .spark{left:47.6%}
   .amp-bg{left:27%;top:50%;transform:translate(-50%,-50%);font-size:min(46vw,620px)}
 
   .greet{padding:110px 32px 96px}
@@ -1017,6 +1019,11 @@ html.anim .prog .pearl:not(.in){opacity:0;transform:translate(-50%,-50%) scale(.
     b.addEventListener('click', function(){ if (b.dataset.lang !== lang) setLang(b.dataset.lang, true); });
   });
   if (lang === 'ru') setLang('ru', false);
+
+  // map: put the venue's 2GIS / Google Maps link here; without one the button stays hidden
+  var MAP_URL = '';
+  var mapLink = document.getElementById('mapLink');
+  if (MAP_URL) mapLink.href = MAP_URL; else mapLink.hidden = true;
 
   // music: the file next to the page, else the shared one in the parent folder
   var song = document.getElementById('song'), mbtn = document.getElementById('music');
