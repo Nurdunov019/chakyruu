@@ -706,17 +706,17 @@ html.anim .prog .pearl:not(.in){opacity:0;transform:translate(-50%,-50%) scale(.
     <span class="ic" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path class="ic-play" d="M8 5v14l11-7z"/></svg></span>
     <span><b>Unchained Melody</b><i>The Righteous Brothers</i></span>
   </button>
-  <button class="mtrack" type="button" data-track="yt" aria-pressed="false">
+  <button class="mtrack" type="button" data-track="jax" aria-pressed="false">
     <span class="ic" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></span>
-    <span><b>Өзгөчө күн</b><i>Jax 02.14 · YouTube</i></span>
+    <span><b>Өзгөчө күн</b><i>Jax 02.14</i></span>
   </button>
-  <div class="yt" id="ytBox" hidden></div>
 </div>
 
 <button class="music" id="music" type="button" aria-label="Музыка" aria-expanded="false" aria-controls="mpanel" hidden>
   <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18V5l11-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="17" cy="16" r="3"/></svg>
 </button>
 <audio id="song" preload="auto" loop></audio>
+<audio id="song2" preload="metadata" loop></audio>
 
 <script>
 (function(){
@@ -1022,8 +1022,11 @@ html.anim .prog .pearl:not(.in){opacity:0;transform:translate(-50%,-50%) scale(.
   var song = document.getElementById('song'), mbtn = document.getElementById('music');
   var srcs = ['../music1.m4a', 'music1.mp4'];
   var nextSrc;
-  var mpanel = document.getElementById('mpanel'), ytBox = document.getElementById('ytBox');
-  var tLocal = mpanel.querySelector('[data-track="local"]'), tYt = mpanel.querySelector('[data-track="yt"]');
+  var mpanel = document.getElementById('mpanel'), song2 = document.getElementById('song2');
+  var tLocal = mpanel.querySelector('[data-track="local"]'), tJax = mpanel.querySelector('[data-track="jax"]');
+  var srcs2 = ['ozgocho-kun.m4a', 'ozgocho-kun.mp4'];
+  song2.addEventListener('error', function(){ if (srcs2.length) { song2.src = srcs2.shift(); song2.load(); } else tJax.hidden = true; });
+  song2.src = srcs2.shift();
   var PLAY = 'M8 5v14l11-7z', PAUSE = 'M7 5h4v14H7zM13 5h4v14h-4z';
   function nextSrcOrHide(){ if (!srcs.length) { tLocal.hidden = true; mbtn.hidden = false; return; } song.src = srcs.shift(); song.load(); }
   song.addEventListener('error', nextSrcOrHide);
@@ -1032,32 +1035,21 @@ html.anim .prog .pearl:not(.in){opacity:0;transform:translate(-50%,-50%) scale(.
   song.addEventListener('canplay', function(){ mbtn.hidden = false; }, {once: true});
   setTimeout(function(){ mbtn.hidden = false; }, 4000);
   function syncUi(){
-    var localOn = !song.paused, ytOn = !ytBox.hidden;
+    var localOn = !song.paused, jaxOn = !song2.paused;
     tLocal.setAttribute('aria-pressed', String(localOn));
-    tYt.setAttribute('aria-pressed', String(ytOn));
+    tJax.setAttribute('aria-pressed', String(jaxOn));
     tLocal.querySelector('path').setAttribute('d', localOn ? PAUSE : PLAY);
-    mbtn.classList.toggle('on', localOn || ytOn);
+    tJax.querySelector('path').setAttribute('d', jaxOn ? PAUSE : PLAY);
+    mbtn.classList.toggle('on', localOn || jaxOn);
   }
-  function stopYt(){ ytBox.hidden = true; ytBox.innerHTML = ''; }
-  function play(){ stopYt(); var p = song.play(); if (p && p.then) p.then(syncUi).catch(syncUi); else syncUi(); }
-  song.addEventListener('pause', syncUi);
-  song.addEventListener('play', syncUi);
+  function start(a, other){ other.pause(); var p = a.play(); if (p && p.then) p.then(syncUi).catch(syncUi); else syncUi(); }
+  function play(){ start(song, song2); }
+  [song, song2].forEach(function(a){ a.addEventListener('pause', syncUi); a.addEventListener('play', syncUi); });
   function openPanel(open){ mpanel.hidden = !open; mbtn.setAttribute('aria-expanded', String(open)); }
   mbtn.addEventListener('click', function(e){ e.stopPropagation(); openPanel(mpanel.hidden); });
   document.addEventListener('click', function(e){ if (!mpanel.hidden && !mpanel.contains(e.target) && e.target !== mbtn) openPanel(false); });
   tLocal.addEventListener('click', function(){ if (song.paused) play(); else song.pause(); });
-  tYt.addEventListener('click', function(){
-    if (!ytBox.hidden) { stopYt(); syncUi(); return; }
-    song.pause();
-    var f = document.createElement('iframe');
-    f.src = 'https://www.youtube-nocookie.com/embed/Y7dBGjXtLT4?autoplay=1&playsinline=1&rel=0';
-    f.title = 'Jax 02.14 — Өзгөчө күн (Official Audio)';
-    f.allow = 'autoplay; encrypted-media; picture-in-picture';
-    f.setAttribute('allowfullscreen', '');
-    ytBox.appendChild(f);
-    ytBox.hidden = false;
-    syncUi();
-  });
+  tJax.addEventListener('click', function(){ if (song2.paused) start(song2, song); else song2.pause(); });
 
   // envelope: opened by the small script next to it; here we only add music, petals and auto-scroll
   var env = document.getElementById('env');
