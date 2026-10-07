@@ -251,6 +251,76 @@ html.anim .a-draw:not(.in) path,html.anim .a-draw:not(.in) circle,html.anim .a-d
 .prog .pearl{transition:opacity .6s ease,transform .7s cubic-bezier(.3,1.6,.5,1)}
 html.anim .prog .pearl:not(.in){opacity:0;transform:translate(-50%,-50%) scale(.2)}
 
+/* ============ laptop / desktop ============ */
+@media (min-width:900px){
+  body{background:#e9e3d9}
+  .page{max-width:none}
+
+  /* envelope lies on a linen table as a real card */
+  .env{left:0;width:100%;max-width:none;transform:none;background:radial-gradient(80% 70% at 50% 45%,#efe9df 0%,#dcd3c5 100%)}
+  .env::before{content:"";position:absolute;left:50%;top:4vh;bottom:4vh;width:calc(92vh * 390 / 844);transform:translateX(-50%);border-radius:18px;box-shadow:0 30px 70px rgba(70,56,36,.28),0 6px 18px rgba(70,56,36,.16)}
+  .env .layer,.env .flash{left:50%;right:auto;top:4vh;bottom:4vh;height:auto;width:calc(92vh * 390 / 844);transform:translateX(-50%);clip-path:inset(0 round 18px)}
+  .env .hint{bottom:calc(4vh + 40px)}
+
+  .lang{right:28px;top:22px}
+  .music{right:28px;bottom:28px}
+  .petals{max-width:none}
+
+  /* opening screen: names on the left, hands on the right */
+  .hero{padding:110px 6vw 150px;justify-content:center}
+  .hero .stack{max-width:1180px;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.15fr);column-gap:3vw;align-items:center;justify-items:center}
+  .hero .stack>*:not(.hands){grid-column:1}
+  .hero .names{font-size:clamp(76px,7vw,112px)}
+  .hero .n1{padding-left:4%}
+  .hero .n2{padding-right:4%}
+  .hero .and{font-size:52px}
+  .hero .date{font-size:22px}
+  .hands{grid-column:2;grid-row:1 / span 5;width:118%;margin:0 -8% 0 0;align-self:center}
+  .amp-bg{left:27%;top:50%;transform:translate(-50%,-50%);font-size:min(46vw,620px)}
+
+  .greet{padding:110px 32px 96px}
+  .greet .script.big{font-size:52px}
+  .greet .name{font-size:62px}
+  .greet .small{font-size:14px}
+
+  .silk{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);column-gap:6vw;align-items:center;justify-items:center;padding:96px 8vw 110px}
+  .silk>.sway,.silk>.month,.silk>.cal{grid-column:1}
+  .silk>.ceremony{grid-column:2;grid-row:1 / span 3;margin-top:0}
+  .silk .month{font-size:60px}
+  .cal{width:min(380px,100%)}
+  .cal .d{height:44px;font-size:15px}
+  .ceremony .script{font-size:52px}
+  .ceremony .small{font-size:14px}
+
+  .prog-sec{padding-top:190px}
+  .doily{left:50%;width:760px;transform:translateX(-50%)}
+  .prog-sec>.script{font-size:60px}
+  .prog{max-width:560px}
+  .step .script{font-size:34px}
+
+  .venue-sec{max-width:1000px;margin:0 auto;padding:130px 40px 110px}
+  .roses{left:0;top:60px;width:260px;height:205px}
+  .venue-head .script{font-size:60px}
+  .venue-row{grid-template-columns:minmax(0,1fr) minmax(0,1.1fr);gap:48px}
+  .venue-row .script{font-size:44px}
+  .venue-row .small{font-size:14px}
+
+  .band{height:min(70vh,640px)}
+  .rings{width:240px;height:174px}
+
+  .dress{padding:120px 40px 80px}
+  .dress .script{font-size:60px}
+  .dress .small{font-size:14px}
+  .arches{width:min(560px,100%);gap:10px}
+
+  .rsvp{max-width:520px;margin:0 auto;padding:60px 40px 110px}
+  .rsvp .script{font-size:56px}
+
+  .finale{padding-top:110px}
+  .finale .script{font-size:60px}
+  .bouquet{max-width:520px}
+}
+
 @media (prefers-reduced-motion:reduce){
   *,*::before,*::after{animation-duration:.01ms!important;animation-delay:0s!important;transition:none!important}
   .petals{display:none}
@@ -620,24 +690,37 @@ html.anim .prog .pearl:not(.in){opacity:0;transform:translate(-50%,-50%) scale(.
   document.getElementById('sealPath').setAttribute('d', 'M' + pts.join(' L') + ' Z');
 
   // lace edges: a scalloped band in the page colour with open-work cut through it
-  document.querySelectorAll('[data-lace]').forEach(function(svg){
+  // the band is drawn in screen pixels, so scallops keep their size on wide screens
+  function drawLace(svg){
+    while (svg.firstChild) svg.removeChild(svg.firstChild);
+    var W = Math.max(390, Math.round(svg.getBoundingClientRect().width || 390));
+    svg.setAttribute('viewBox', '0 0 ' + W + ' 40');
     var fill = svg.getAttribute('data-lace');
     var hole = svg.getAttribute('data-hole') || '#2b2925';
     var d = 'M0 40 L0 22';
-    for (var x0 = 0; x0 < 390; x0 += 26) {
+    for (var x0 = 0; x0 < W; x0 += 26) {
       d += ' C ' + (x0 + 4) + ' 6, ' + (x0 + 22) + ' 6, ' + (x0 + 26) + ' 22';
     }
-    d += ' L390 40 Z';
+    d += ' L' + W + ' 40 Z';
     el('path', {d: d, fill: fill}, svg);
     var g = el('g', {fill: hole, opacity: 0.55}, svg);
-    for (var cx = 13; cx < 390; cx += 26) {
+    for (var cx = 13; cx < W; cx += 26) {
       el('circle', {cx: cx, cy: 19, r: 2.6}, g);
       el('ellipse', {cx: cx - 6, cy: 25, rx: 1.4, ry: 3, transform: 'rotate(-35 ' + (cx - 6) + ' 25)'}, g);
       el('ellipse', {cx: cx + 6, cy: 25, rx: 1.4, ry: 3, transform: 'rotate(35 ' + (cx + 6) + ' 25)'}, g);
       el('circle', {cx: cx - 13, cy: 30, r: 1.5}, g);
       el('path', {d: 'M' + (cx - 9) + ' 14 C ' + (cx - 5) + ' 10, ' + (cx + 5) + ' 10, ' + (cx + 9) + ' 14', fill: 'none', stroke: hole, 'stroke-width': 0.8}, g);
     }
-    for (var dx = 4; dx < 390; dx += 6.5) el('circle', {cx: dx, cy: 35, r: 0.9}, g);
+    for (var dx = 4; dx < W; dx += 6.5) el('circle', {cx: dx, cy: 35, r: 0.9}, g);
+  }
+  var laces = document.querySelectorAll('[data-lace]');
+  laces.forEach(drawLace);
+  var laceW = window.innerWidth, laceT = null;
+  window.addEventListener('resize', function(){
+    if (Math.abs(window.innerWidth - laceW) < 40) return;
+    laceW = window.innerWidth;
+    clearTimeout(laceT);
+    laceT = setTimeout(function(){ laces.forEach(drawLace); }, 200);
   });
 
   // fine lace for the opening screen: scallops with picot loops, inner line and eyelet flowers
