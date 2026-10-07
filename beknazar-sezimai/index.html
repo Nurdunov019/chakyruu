@@ -940,7 +940,7 @@ html.anim .prog .pearl:not(.in){opacity:0;transform:translate(-50%,-50%) scale(.
     function step(ts){
       if (!active) return;
       if (last === null) last = ts;
-      pos += Math.min(60, window.innerHeight / 11) * Math.min(0.05, (ts - last) / 1000); last = ts;
+      pos += Math.min(110, window.innerHeight / 8) * Math.min(0.05, (ts - last) / 1000); last = ts;
       if (pos >= maxY() - 1) { window.scrollTo(0, maxY()); active = false; return; }
       var y = Math.round(pos);
       if (y !== lastY) { window.scrollTo(0, y); lastY = y; }
