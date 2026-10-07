@@ -225,6 +225,22 @@ body.opened .mouse-cue{opacity:1}
 .swap{animation:swap .5s ease}
 @keyframes swap{from{opacity:0;filter:blur(3px)}to{opacity:1;filter:none}}
 
+/* music panel */
+.mpanel{position:fixed;z-index:45;right:max(14px,calc(50% - 220px + 14px));bottom:calc(70px + env(safe-area-inset-bottom,0px));width:min(356px,calc(100vw - 28px));padding:14px;border-radius:18px;background:#fbfaf7;box-shadow:0 14px 40px rgba(40,32,22,.22),0 2px 8px rgba(40,32,22,.1);text-align:left;transform-origin:100% 100%;transition:opacity .25s ease,transform .3s cubic-bezier(.2,.8,.2,1)}
+.mpanel[hidden]{display:block!important;opacity:0;transform:translateY(8px) scale(.96);pointer-events:none;visibility:hidden}
+.mpanel h3{margin:2px 4px 10px;font-size:10px;letter-spacing:.3em;text-transform:uppercase;color:var(--muted);font-weight:400}
+.mtrack{display:flex;align-items:center;gap:12px;width:100%;min-height:52px;padding:8px 10px;border:0;border-radius:12px;background:transparent;font-family:var(--f-sans);text-align:left;cursor:pointer;color:var(--ink)}
+.mtrack+.mtrack{margin-top:4px}
+.mtrack:hover{background:#f1ede6}
+.mtrack:focus-visible{outline:2px solid var(--script);outline-offset:1px}
+.mtrack[aria-pressed="true"]{background:#efe9e0}
+.mtrack .ic{flex:none;width:34px;height:34px;border-radius:50%;border:1px solid rgba(74,70,64,.3);display:flex;align-items:center;justify-content:center;color:var(--script)}
+.mtrack b{display:block;font-weight:500;font-size:13px}
+.mtrack i{display:block;font-style:normal;font-size:11px;color:var(--muted);margin-top:2px}
+.yt{margin-top:10px;border-radius:12px;overflow:hidden;background:#111;aspect-ratio:16/9;min-height:200px}
+.yt iframe{display:block;width:100%;height:100%;border:0}
+@media (min-width:900px){.mpanel{right:28px;bottom:84px}}
+
 /* falling petals */
 .petals{position:fixed;top:0;bottom:0;left:50%;width:100%;max-width:440px;transform:translateX(-50%);pointer-events:none;z-index:30;overflow:hidden}
 .petal{position:absolute;top:-30px;width:var(--s,12px);height:calc(var(--s,12px) * 1.35);opacity:0;animation:fall linear infinite;will-change:transform,opacity}
@@ -684,7 +700,20 @@ html.anim .prog .pearl:not(.in){opacity:0;transform:translate(-50%,-50%) scale(.
   <button type="button" data-lang="ru" aria-pressed="false">РУС</button>
 </div>
 
-<button class="music" id="music" type="button" aria-label="Музыка" hidden>
+<div class="mpanel" id="mpanel" role="dialog" aria-label="Музыка" hidden>
+  <h3 data-ru="Музыка">Ырлар</h3>
+  <button class="mtrack" type="button" data-track="local" aria-pressed="false">
+    <span class="ic" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path class="ic-play" d="M8 5v14l11-7z"/></svg></span>
+    <span><b>Unchained Melody</b><i>The Righteous Brothers</i></span>
+  </button>
+  <button class="mtrack" type="button" data-track="yt" aria-pressed="false">
+    <span class="ic" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></span>
+    <span><b>Өзгөчө күн</b><i>Jax 02.14 · YouTube</i></span>
+  </button>
+  <div class="yt" id="ytBox" hidden></div>
+</div>
+
+<button class="music" id="music" type="button" aria-label="Музыка" aria-expanded="false" aria-controls="mpanel" hidden>
   <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18V5l11-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="17" cy="16" r="3"/></svg>
 </button>
 <audio id="song" preload="auto" loop></audio>
@@ -992,13 +1021,42 @@ html.anim .prog .pearl:not(.in){opacity:0;transform:translate(-50%,-50%) scale(.
   // music: the file next to the page, else the shared one in the parent folder
   var song = document.getElementById('song'), mbtn = document.getElementById('music');
   var srcs = ['../music1.m4a', 'music1.mp4'];
-  function nextSrc(){ if (!srcs.length) { mbtn.hidden = true; return; } song.src = srcs.shift(); song.load(); }
-  song.addEventListener('error', nextSrc);
+  var nextSrc;
+  var mpanel = document.getElementById('mpanel'), ytBox = document.getElementById('ytBox');
+  var tLocal = mpanel.querySelector('[data-track="local"]'), tYt = mpanel.querySelector('[data-track="yt"]');
+  var PLAY = 'M8 5v14l11-7z', PAUSE = 'M7 5h4v14H7zM13 5h4v14h-4z';
+  function nextSrcOrHide(){ if (!srcs.length) { tLocal.hidden = true; mbtn.hidden = false; return; } song.src = srcs.shift(); song.load(); }
+  song.addEventListener('error', nextSrcOrHide);
+  nextSrc = nextSrcOrHide;
   nextSrc();
   song.addEventListener('canplay', function(){ mbtn.hidden = false; }, {once: true});
-  function play(){ var p = song.play(); if (p && p.then) p.then(function(){ mbtn.classList.add('on'); }).catch(function(){}); }
-  mbtn.addEventListener('click', function(){
-    if (song.paused) play(); else { song.pause(); mbtn.classList.remove('on'); }
+  setTimeout(function(){ mbtn.hidden = false; }, 4000);
+  function syncUi(){
+    var localOn = !song.paused, ytOn = !ytBox.hidden;
+    tLocal.setAttribute('aria-pressed', String(localOn));
+    tYt.setAttribute('aria-pressed', String(ytOn));
+    tLocal.querySelector('path').setAttribute('d', localOn ? PAUSE : PLAY);
+    mbtn.classList.toggle('on', localOn || ytOn);
+  }
+  function stopYt(){ ytBox.hidden = true; ytBox.innerHTML = ''; }
+  function play(){ stopYt(); var p = song.play(); if (p && p.then) p.then(syncUi).catch(syncUi); else syncUi(); }
+  song.addEventListener('pause', syncUi);
+  song.addEventListener('play', syncUi);
+  function openPanel(open){ mpanel.hidden = !open; mbtn.setAttribute('aria-expanded', String(open)); }
+  mbtn.addEventListener('click', function(e){ e.stopPropagation(); openPanel(mpanel.hidden); });
+  document.addEventListener('click', function(e){ if (!mpanel.hidden && !mpanel.contains(e.target) && e.target !== mbtn) openPanel(false); });
+  tLocal.addEventListener('click', function(){ if (song.paused) play(); else song.pause(); });
+  tYt.addEventListener('click', function(){
+    if (!ytBox.hidden) { stopYt(); syncUi(); return; }
+    song.pause();
+    var f = document.createElement('iframe');
+    f.src = 'https://www.youtube-nocookie.com/embed/Y7dBGjXtLT4?autoplay=1&playsinline=1&rel=0';
+    f.title = 'Jax 02.14 — Өзгөчө күн (Official Audio)';
+    f.allow = 'autoplay; encrypted-media; picture-in-picture';
+    f.setAttribute('allowfullscreen', '');
+    ytBox.appendChild(f);
+    ytBox.hidden = false;
+    syncUi();
   });
 
   // envelope: opened by the small script next to it; here we only add music, petals and auto-scroll
