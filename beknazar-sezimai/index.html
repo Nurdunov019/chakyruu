@@ -935,25 +935,36 @@ html.anim .prog .pearl:not(.in){opacity:0;transform:translate(-50%,-50%) scale(.
   // slow auto-scroll after opening; a touch, wheel or key pauses it, it resumes after a quiet moment
   function autoScroll(){
     if (reduce) return;
-    var de = document.documentElement, active = false, pos = 0, last = null, resumeT = null, lastY = -1;
+    var de = document.documentElement, active = false, y = 0, resumeT = null, perFrame = 2;
     function maxY(){ return Math.max(0, document.documentElement.scrollHeight - window.innerHeight); }
-    function step(ts){
+    // the same whole number of pixels on every screen refresh: uneven 1px/2px steps are what made the page tremble
+    function measure(done){
+      var n = 0, t0 = 0;
+      function tick(ts){
+        if (n === 0) t0 = ts;
+        if (++n < 24) return requestAnimationFrame(tick);
+        var fps = 1000 / ((ts - t0) / 23);
+        perFrame = Math.max(1, Math.round(Math.min(110, window.innerHeight / 8) / (fps || 60)));
+        done();
+      }
+      requestAnimationFrame(tick);
+    }
+    function step(){
       if (!active) return;
-      if (last === null) last = ts;
-      pos += Math.min(110, window.innerHeight / 8) * Math.min(0.05, (ts - last) / 1000); last = ts;
-      if (pos >= maxY() - 1) { window.scrollTo(0, maxY()); active = false; return; }
-      var y = Math.round(pos);
-      if (y !== lastY) { window.scrollTo(0, y); lastY = y; }
+      var end = maxY();
+      y = Math.min(end, y + perFrame);
+      window.scrollTo(0, y);
+      if (y >= end) { active = false; return; }
       requestAnimationFrame(step);
     }
-    function start(){ if (active || window.scrollY >= maxY() - 2) return; pos = window.scrollY; last = null; active = true; de.style.scrollBehavior = 'auto'; requestAnimationFrame(step); }
+    function start(){ if (active || window.scrollY >= maxY() - 2) return; y = Math.round(window.scrollY); active = true; de.style.scrollBehavior = 'auto'; requestAnimationFrame(step); }
     function hold(){ active = false; clearTimeout(resumeT); }
     function later(){ clearTimeout(resumeT); resumeT = setTimeout(start, 2500); }
     ['touchstart', 'mousedown'].forEach(function(e){ window.addEventListener(e, hold, {passive: true}); });
     ['touchend', 'mouseup'].forEach(function(e){ window.addEventListener(e, later, {passive: true}); });
     window.addEventListener('wheel', function(){ hold(); later(); }, {passive: true});
     window.addEventListener('keydown', function(){ hold(); later(); });
-    setTimeout(start, 5200);
+    measure(function(){ setTimeout(start, 4600); });
   }
 
   // language: Kyrgyz text is in the markup, Russian in data-ru
