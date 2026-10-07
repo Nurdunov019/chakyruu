@@ -79,8 +79,8 @@ body.opened .amp-bg{opacity:1}
 .hero .date::before,.hero .date::after{content:"";width:30px;height:1px;background:var(--wine-soft);opacity:.6;transition:width 1.2s ease calc(var(--d,0s) + .4s)}
 html.anim .hero .date:not(.in)::before,html.anim .hero .date:not(.in)::after{width:0}
 .hands{position:relative;z-index:2;width:118%;max-width:none;margin:30px 0 0 -14%;align-self:flex-start}
-.hands img{display:block;width:100%;height:auto;-webkit-mask-image:linear-gradient(180deg,transparent 0%,#000 16%);mask-image:linear-gradient(180deg,transparent 0%,#000 16%);filter:drop-shadow(0 18px 24px rgba(90,60,40,.18));animation:float 7s ease-in-out 4s infinite}
-@keyframes float{0%,100%{transform:translateY(0) rotate(0)}50%{transform:translateY(-7px) rotate(-.5deg)}}
+.hands img{display:block;width:100%;height:auto;-webkit-mask-image:linear-gradient(180deg,transparent 0%,#000 16%);mask-image:linear-gradient(180deg,transparent 0%,#000 16%);animation:float 8s ease-in-out 4s infinite;will-change:transform;backface-visibility:hidden;transform:translateZ(0)}
+@keyframes float{0%,100%{transform:translate3d(0,0,0)}50%{transform:translate3d(0,-6px,0)}}
 html.anim .hands{opacity:0;transform:translate(-12%,4%)}
 .hands{transition:opacity 1.8s ease 1.2s,transform 2.6s cubic-bezier(.2,.7,.2,1) 1.2s}
 body.opened .hands{opacity:1;transform:none}
@@ -111,15 +111,16 @@ body.opened .mouse-cue{opacity:1}
     linear-gradient(140deg,rgba(255,255,255,0) 55%,rgba(255,255,255,.75) 68%,rgba(255,255,255,0) 80%),
     linear-gradient(28deg,rgba(0,0,0,0) 70%,rgba(120,112,100,.12) 82%,rgba(0,0,0,0) 92%),
     linear-gradient(180deg,#f3f2ef 0%,var(--silk) 50%,#e6e4df 100%)}
-.silk::after{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(105deg,transparent 30%,rgba(255,255,255,.6) 45%,rgba(255,255,255,.15) 55%,transparent 70%);background-size:260% 100%;animation:sheen 8s ease-in-out infinite alternate}
-@keyframes sheen{from{background-position:100% 0}to{background-position:0 0}}
+.silk{overflow:hidden}
+.silk::after{content:"";position:absolute;top:0;bottom:0;left:-60%;width:220%;pointer-events:none;background:linear-gradient(105deg,transparent 38%,rgba(255,255,255,.55) 47%,rgba(255,255,255,.15) 53%,transparent 62%);animation:sheen 9s ease-in-out infinite alternate;will-change:transform}
+@keyframes sheen{from{transform:translate3d(-22%,0,0)}to{transform:translate3d(22%,0,0)}}
 .silk>*{position:relative;z-index:1}
-.sway{transform-origin:50% 0;animation:sway 6s ease-in-out infinite}
+.sway{transform-origin:50% 0;animation:sway 7s ease-in-out infinite;will-change:transform;backface-visibility:hidden}
 @keyframes sway{0%,100%{transform:rotate(-1.6deg)}50%{transform:rotate(1.6deg)}}
 .tw{animation:tw 2.4s ease-in-out infinite}
 .tw:nth-child(2n){animation-delay:.8s}.tw:nth-child(3n){animation-delay:1.5s}
 @keyframes tw{0%,100%{opacity:1}50%{opacity:.25}}
-.cal .d.mark svg{animation:beat 1.7s ease-in-out infinite}
+.cal .d.mark svg{animation:beat 1.7s ease-in-out infinite;will-change:transform}
 @keyframes beat{0%,100%{transform:translate(-50%,-50%) scale(1)}15%{transform:translate(-50%,-50%) scale(1.14)}30%{transform:translate(-50%,-50%) scale(1)}45%{transform:translate(-50%,-50%) scale(1.08)}}
 .shine{stroke-dasharray:.14 .86!important;stroke-dashoffset:1;opacity:0;transition:none!important}
 .a-draw.in .shine{opacity:.95;animation:shine 3.2s linear 2.6s infinite}
@@ -156,9 +157,6 @@ body.opened .mouse-cue{opacity:1}
 .venue-row .script{font-size:34px;margin-top:10px}
 .blob{position:relative;width:100%;aspect-ratio:1/1.05;border-radius:58% 42% 52% 48% / 46% 56% 44% 54%;animation:morph 9s ease-in-out infinite;background:linear-gradient(160deg,#d9d4cb,#bfb6a7 60%,#a99f8f);display:flex;align-items:center;justify-content:center;overflow:hidden}
 @keyframes morph{0%,100%{border-radius:58% 42% 52% 48% / 46% 56% 44% 54%}33%{border-radius:44% 56% 40% 60% / 58% 42% 58% 42%}66%{border-radius:52% 48% 62% 38% / 40% 60% 46% 54%}}
-.roses .bloom{transform-box:fill-box;transform-origin:50% 50%;animation:bloom 7s ease-in-out infinite}
-.roses .bloom:nth-child(2n){animation-delay:-3s}
-@keyframes bloom{0%,100%{transform:scale(1) rotate(0)}50%{transform:scale(1.05) rotate(3deg)}}
 .blob.has-photo{background:var(--photo) center/cover no-repeat}
 .blob span{font-size:10px;letter-spacing:.2em;text-transform:uppercase;color:#f7f4ee;padding:0 18px}
 .blob.has-photo span{display:none}
@@ -211,7 +209,7 @@ body.opened .mouse-cue{opacity:1}
 .sign{padding:28px 0 calc(40px + env(safe-area-inset-bottom,0px));font-size:10px;letter-spacing:.34em;color:#8f887d;text-transform:uppercase}
 
 /* ============ music ============ */
-.music{position:fixed;z-index:40;right:max(14px,calc(50% - 220px + 14px));bottom:calc(16px + env(safe-area-inset-bottom,0px));width:44px;height:44px;border-radius:50%;border:1px solid rgba(74,70,64,.35);background:rgba(251,250,247,.85);backdrop-filter:blur(6px);display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--script)}
+.music{position:fixed;z-index:40;right:max(14px,calc(50% - 220px + 14px));bottom:calc(16px + env(safe-area-inset-bottom,0px));width:44px;height:44px;border-radius:50%;border:1px solid rgba(74,70,64,.35);background:rgba(251,250,247,.96);display:flex;align-items:center;justify-content:center;cursor:pointer;color:var(--script)}
 .music:focus-visible{outline:2px solid var(--script);outline-offset:2px}
 .music.on svg{animation:spin 6s linear infinite}
 .music:not(.on)::after{content:"";position:absolute;inset:-1px;border-radius:50%;border:1px solid rgba(74,70,64,.5);animation:ping 2.2s ease-out infinite}
@@ -219,7 +217,7 @@ body.opened .mouse-cue{opacity:1}
 @keyframes spin{to{transform:rotate(360deg)}}
 
 /* language switch */
-.lang{position:fixed;z-index:70;top:calc(14px + env(safe-area-inset-top,0px));right:max(14px,calc(50% - 220px + 14px));display:flex;padding:3px;border-radius:999px;background:rgba(251,250,247,.86);backdrop-filter:blur(6px);box-shadow:0 2px 10px rgba(40,34,26,.18)}
+.lang{position:fixed;z-index:70;top:calc(14px + env(safe-area-inset-top,0px));right:max(14px,calc(50% - 220px + 14px));display:flex;padding:3px;border-radius:999px;background:rgba(251,250,247,.97);box-shadow:0 2px 10px rgba(40,34,26,.18)}
 .lang button{min-width:48px;min-height:34px;padding:0 12px;border:0;border-radius:999px;background:transparent;font-family:var(--f-sans);font-size:11px;font-weight:500;letter-spacing:.14em;color:var(--muted);cursor:pointer;transition:background .25s,color .25s}
 .lang button[aria-pressed="true"]{background:var(--script);color:#fbfaf7}
 .lang button:focus-visible{outline:2px solid var(--script);outline-offset:2px}
@@ -228,7 +226,7 @@ body.opened .mouse-cue{opacity:1}
 
 /* falling petals */
 .petals{position:fixed;top:0;bottom:0;left:50%;width:100%;max-width:440px;transform:translateX(-50%);pointer-events:none;z-index:30;overflow:hidden}
-.petal{position:absolute;top:-30px;width:var(--s,12px);height:calc(var(--s,12px) * 1.35);opacity:0;animation:fall linear infinite}
+.petal{position:absolute;top:-30px;width:var(--s,12px);height:calc(var(--s,12px) * 1.35);opacity:0;animation:fall linear infinite;will-change:transform,opacity}
 .petal::before{content:"";position:absolute;inset:0;border-radius:85% 0 85% 0;background:linear-gradient(135deg,#fffefb 0%,#f6efe3 45%,#e3d5bf 100%);box-shadow:inset -1px -2px 3px rgba(160,136,98,.35),0 2px 5px rgba(60,48,30,.22);animation:flutter 2.6s ease-in-out infinite alternate}
 @keyframes flutter{from{transform:rotate3d(1,.4,0,0deg) rotate(0)}to{transform:rotate3d(1,.4,0,62deg) rotate(28deg)}}
 @keyframes fall{0%{opacity:0;transform:translate3d(0,-5vh,0) rotate(0)}10%{opacity:.92}50%{transform:translate3d(34px,50vh,0) rotate(160deg)}90%{opacity:.7}100%{opacity:0;transform:translate3d(-18px,108vh,0) rotate(340deg)}}
@@ -879,7 +877,7 @@ html.anim .prog .pearl:not(.in){opacity:0;transform:translate(-50%,-50%) scale(.
   function petals(){
     if (reduce) return;
     var box = document.createElement('div'); box.className = 'petals'; box.setAttribute('aria-hidden', 'true');
-    for (var i = 0; i < 12; i++) {
+    for (var i = 0, np = window.innerWidth < 600 ? 7 : 12; i < np; i++) {
       var p = document.createElement('i'); p.className = 'petal';
       p.style.left = (Math.random() * 100).toFixed(1) + '%';
       p.style.animationDuration = (12 + Math.random() * 12).toFixed(1) + 's';
@@ -893,14 +891,15 @@ html.anim .prog .pearl:not(.in){opacity:0;transform:translate(-50%,-50%) scale(.
   // slow auto-scroll after opening; a touch, wheel or key pauses it, it resumes after a quiet moment
   function autoScroll(){
     if (reduce) return;
-    var de = document.documentElement, active = false, pos = 0, last = null, resumeT = null;
+    var de = document.documentElement, active = false, pos = 0, last = null, resumeT = null, lastY = -1;
     function maxY(){ return Math.max(0, document.documentElement.scrollHeight - window.innerHeight); }
     function step(ts){
       if (!active) return;
       if (last === null) last = ts;
-      pos += (window.innerHeight / 9) * ((ts - last) / 1000); last = ts;
+      pos += Math.min(60, window.innerHeight / 11) * Math.min(0.05, (ts - last) / 1000); last = ts;
       if (pos >= maxY() - 1) { window.scrollTo(0, maxY()); active = false; return; }
-      window.scrollTo(0, pos);
+      var y = Math.round(pos);
+      if (y !== lastY) { window.scrollTo(0, y); lastY = y; }
       requestAnimationFrame(step);
     }
     function start(){ if (active || window.scrollY >= maxY() - 2) return; pos = window.scrollY; last = null; active = true; de.style.scrollBehavior = 'auto'; requestAnimationFrame(step); }
