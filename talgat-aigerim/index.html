@@ -156,6 +156,9 @@ body.opened .mouse-cue{opacity:1}
 .venue-head .script{font-size:44px;text-align:right;line-height:1}
 .venue-row{position:relative;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:12px;align-items:center;margin-top:48px;text-align:left}
 .venue-row .small{max-width:20ch}
+.venue-row.single{grid-template-columns:minmax(0,1fr);justify-items:center;text-align:center}
+.venue-row.single .small{max-width:none}
+.venue-row.single .mapbtn{margin-left:auto;margin-right:auto}
 .venue-row .script{font-size:34px;margin-top:10px}
 .blob{position:relative;width:100%;aspect-ratio:1/1.05;border-radius:58% 42% 52% 48% / 46% 56% 44% 54%;animation:morph 9s ease-in-out infinite;background:linear-gradient(160deg,#d9d4cb,#bfb6a7 60%,#a99f8f);display:flex;align-items:center;justify-content:center;overflow:hidden}
 @keyframes morph{0%,100%{border-radius:58% 42% 52% 48% / 46% 56% 44% 54%}33%{border-radius:44% 56% 40% 60% / 58% 42% 58% 42%}66%{border-radius:52% 48% 62% 38% / 40% 60% 46% 54%}}
@@ -605,13 +608,12 @@ html.anim .prog .pearl:not(.in){opacity:0;transform:translate(-50%,-50%) scale(.
       </g>
     </svg>
     <div class="venue-head"><h2 class="script" data-ru="Место&lt;br&gt;проведения">Тойдун<br>дареги</h2></div>
-    <div class="venue-row">
+    <div class="venue-row single">
       <div>
         <p class="small" data-ru="г. Кара-Балта,&lt;br&gt;ул. 8 Марта, 81">Кара-Балта шаары,<br>8-март көчөсү, 81</p>
         <p class="script" data-ru="ресторан «Эр-Чолпон»">«Эр-Чолпон» рестораны</p>
         <a class="mapbtn" id="mapLink" href="#" target="_blank" rel="noopener" data-ru="открыть&lt;br&gt;карту">картадан<br>көрүү</a>
       </div>
-      <div class="blob" data-photo="images.jpeg"><span data-ru="Фото зала">Залдын сүрөтү</span></div>
     </div>
   </section>
 
