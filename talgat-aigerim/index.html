@@ -229,6 +229,9 @@ html.anim .a-right:not(.in){opacity:0;transform:translateX(46px)}
 html.anim .a-pop:not(.in){opacity:0;transform:scale(.4)}
 html.anim .a-write:not(.in){clip-path:inset(-30% 100% -30% 0);opacity:.3}
 .a-write.in{clip-path:inset(-30% -10% -30% -10%)}
+/* room for swashes and tails: Safari clips at the element's own box, so the box gets padding instead of negative insets */
+.a-write:not(.names){padding:.14em .22em;margin:-.14em -.22em}
+.hero .names.a-write{padding-top:.12em;padding-bottom:.12em}
 html.anim .a-rise:not(.in){transform:scaleY(0)}
 html.anim .a-draw path,html.anim .a-draw circle,html.anim .a-draw ellipse{stroke-dasharray:1 1}
 html.anim .a-draw:not(.in) path,html.anim .a-draw:not(.in) circle,html.anim .a-draw:not(.in) ellipse{stroke-dashoffset:1}
