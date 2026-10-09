@@ -649,7 +649,7 @@ html.anim .prog .pearl:not(.in){opacity:0;transform:translate(-50%,-50%) scale(.
 
 <div class="mpanel" id="mpanel" role="dialog" aria-label="Музыка" hidden>
   <h3 data-ru="Музыка">Ырлар</h3>
-  <button class="mtrack" type="button" data-track="local" aria-pressed="false">
+  <button class="mtrack" type="button" data-track="local" aria-pressed="false" hidden>
     <span class="ic" aria-hidden="true"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path class="ic-play" d="M8 5v14l11-7z"/></svg></span>
     <span><b>Unchained Melody</b><i>The Righteous Brothers</i></span>
   </button>
@@ -663,7 +663,7 @@ html.anim .prog .pearl:not(.in){opacity:0;transform:translate(-50%,-50%) scale(.
   <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 18V5l11-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="17" cy="16" r="3"/></svg>
 </button>
 <audio id="song" preload="auto" loop></audio>
-<audio id="song2" preload="metadata" loop></audio>
+<audio id="song2" preload="auto" loop></audio>
 
 <script>
 (function(){
@@ -999,7 +999,7 @@ html.anim .prog .pearl:not(.in){opacity:0;transform:translate(-50%,-50%) scale(.
 
   // music: the file next to the page, else the shared one in the parent folder
   var song = document.getElementById('song'), mbtn = document.getElementById('music');
-  var srcs = ['../music1.m4a', 'music1.mp4'];
+  var srcs = [];
   var nextSrc;
   var mpanel = document.getElementById('mpanel'), song2 = document.getElementById('song2');
   var tLocal = mpanel.querySelector('[data-track="local"]'), tJax = mpanel.querySelector('[data-track="jax"]');
@@ -1022,7 +1022,7 @@ html.anim .prog .pearl:not(.in){opacity:0;transform:translate(-50%,-50%) scale(.
     mbtn.classList.toggle('on', localOn || jaxOn);
   }
   function start(a, other){ other.pause(); var p = a.play(); if (p && p.then) p.then(syncUi).catch(syncUi); else syncUi(); }
-  function play(){ start(song, song2); }
+  function play(){ start(song2, song); }
   [song, song2].forEach(function(a){ a.addEventListener('pause', syncUi); a.addEventListener('play', syncUi); });
   function openPanel(open){ mpanel.hidden = !open; mbtn.setAttribute('aria-expanded', String(open)); }
   mbtn.addEventListener('click', function(e){ e.stopPropagation(); openPanel(mpanel.hidden); });
